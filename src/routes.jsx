@@ -11,7 +11,7 @@ import MenuPage from "./pages/menu/MenuPage";
 import OrdersPage from "./pages/orders/OrdersPage";
 import NewOrder from "./pages/orders/NewOrder";
 import SettingPage from "./pages/Setting/SettingPage";
-import EmployeesPage from "./pages/employees/employees";
+import EmployeesPage from "./pages/employees/Employees";
 
 // Loaders (Logic)
 import { menuLoader } from "./pages/menu/menuLoader";
@@ -95,3 +95,4 @@ export const router = createBrowserRouter(
   ],
   // { basename: "/test" },
 );
+
