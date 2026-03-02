@@ -11,12 +11,12 @@ import MenuPage from "./pages/menu/MenuPage";
 import OrdersPage from "./pages/orders/OrdersPage";
 import NewOrder from "./pages/orders/NewOrder";
 import SettingPage from "./pages/Setting/SettingPage";
-import EmployeesPage from "./pages/employees/Employees";
+import EmployeesPage from "./pages/employees/employees";
 
 // Loaders (Logic)
 import { menuLoader } from "./pages/menu/menuLoader";
 import { ordersLoader } from "./pages/orders/ordersLoader";
-import { employeesLoader } from "./pages/employees/employeesLoader";
+import { employeesLoader } from "./pages/employees/EmployeesLoader";
 //Fallback
 import MenuFallback from "./pages/menu/MenuFallback";
 import OrderFallback from "./pages/orders/OrderFallback";
@@ -95,4 +95,3 @@ export const router = createBrowserRouter(
   ],
   // { basename: "/test" },
 );
-

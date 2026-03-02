@@ -16,23 +16,30 @@ import {
 import { Toaster } from "@/components/ui/sonner";
 import { Outlet, Link, useLocation } from "react-router-dom";
 import React from "react";
+import { useEffect } from "react";
 
 import { useOrdersRealtime } from "@/hooks/useOrdersRealtime";
 import OneSignal from "react-onesignal";
-import { useEffect } from "react";
+import { useAuth } from "@/hooks/useAuth";
+
 export default function DashboardLayout() {
+  const user = useAuth();
   useEffect(() => {
     const initOneSignal = async () => {
       try {
         await OneSignal.init({
           appId: "2b1a2a08-fa45-43cd-b4ca-33e02f06a317",
           serviceWorkerPath: "/OneSignalSDKWorker.js",
+
           notifyButton: {
             enable: true,
           },
         });
 
-
+        if (user?.id) {
+          await OneSignal.login(user.id);
+          console.log("OneSignal linked to user:", user.id);
+        }
         console.log("OneSignal is ready!");
       } catch (err) {
         console.error("OneSignal Init Error:", err);
@@ -40,7 +47,7 @@ export default function DashboardLayout() {
     };
 
     initOneSignal();
-  }, []);
+  }, [user?.id]);
 
   useOrdersRealtime();
 
@@ -91,6 +98,3 @@ export default function DashboardLayout() {
     </SidebarProvider>
   );
 }
-
-
-

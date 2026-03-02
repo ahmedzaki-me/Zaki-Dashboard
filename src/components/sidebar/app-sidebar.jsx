@@ -105,8 +105,11 @@ export function AppSidebar({ ...props }) {
           <SidebarMenuItem>
             <SidebarMenuButton size="lg" asChild>
               <Link to="../dashboard">
-                <div className="bg-sidebar-primary text-sidebar-primary-foreground flex aspect-square size-8 items-center justify-center rounded-lg">
-                  AZ
+                <div className="bg-sidebar-primary text-sidebar-primary-foreground flex aspect-square size-8 items-center justify-center rounded-[3px] overflow-hidden">
+                  <img
+                    src="/Zaki-Dashboard-Logo2.png"
+                    alt="Zaki-Dashboard-Logo.png"
+                  />
                 </div>
 
                 <div className="grid flex-1 text-left text-sm leading-tight">
