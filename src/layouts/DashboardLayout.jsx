@@ -25,7 +25,7 @@ export default function DashboardLayout() {
     const initOneSignal = async () => {
       try {
         await OneSignal.init({
-          appId: "0f4beb77-bf1e-4741-9a8c-0765afb4fd56",
+          appId: "2b1a2a08-fa45-43cd-b4ca-33e02f06a317",
           serviceWorkerPath: "/OneSignalSDKWorker.js",
           notifyButton: {
             enable: true,
@@ -91,5 +91,6 @@ export default function DashboardLayout() {
     </SidebarProvider>
   );
 }
+
 
 
