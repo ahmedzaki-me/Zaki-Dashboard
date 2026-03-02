@@ -16,7 +16,7 @@ import EmployeesPage from "./pages/employees/Employees";
 // Loaders (Logic)
 import { menuLoader } from "./pages/menu/menuLoader";
 import { ordersLoader } from "./pages/orders/ordersLoader";
-import { employeesLoader } from "./pages/employees/EmployeesLoader";
+import { employeesLoader } from "./pages/employees/employeesLoader";
 //Fallback
 import MenuFallback from "./pages/menu/MenuFallback";
 import OrderFallback from "./pages/orders/OrderFallback";
@@ -95,4 +95,5 @@ export const router = createBrowserRouter(
   ],
   // { basename: "/test" },
 );
+
 
