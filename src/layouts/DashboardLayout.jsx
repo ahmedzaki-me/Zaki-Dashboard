@@ -26,10 +26,7 @@ export default function DashboardLayout() {
       try {
         await OneSignal.init({
           appId: "2b1a2a08-fa45-43cd-b4ca-33e02f06a317",
-          serviceWorkerPath: "test/OneSignalSDKWorker.js",
-          serviceWorkerParam: { scope: "/test/" },
-
-          allowLocalhostAsSecureOrigin: true,
+          serviceWorkerPath: "/OneSignalSDKWorker.js",
           notifyButton: {
             enable: true,
           },
@@ -94,3 +91,4 @@ export default function DashboardLayout() {
     </SidebarProvider>
   );
 }
+
