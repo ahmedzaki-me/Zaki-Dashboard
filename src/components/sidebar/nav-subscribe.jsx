@@ -31,12 +31,12 @@ export default function NavSubscribe() {
       "change",
       handleSubscriptionChange,
     );
-    // return () => {
-    //   OneSignal.User.PushSubscription.removeEventListener(
-    //     "change",
-    //     handleSubscriptionChange,
-    //   );
-    // };
+    return () => {
+      OneSignal.User.PushSubscription.removeEventListener(
+        "change",
+        handleSubscriptionChange,
+      );
+    };
   }, []);
 
   const handleToggle = async (checked) => {
@@ -55,17 +55,18 @@ export default function NavSubscribe() {
         }
         await OneSignal.Notifications.requestPermission();
         await OneSignal.login(userId);
+        await OneSignal.User.PushSubscription.optIn();
         setIsSubscribed(true);
 
         console.log("OneSignal Login Success");
       } else {
+        await OneSignal.User.PushSubscription.optOut();
         await OneSignal.logout();
         setIsSubscribed(false);
         console.log("OneSignal Logout Success");
       }
     } catch (error) {
       console.error("Error toggling OneSignal subscription:", error);
-      // setIsSubscribed(!checked);
     } finally {
       setIsLoading(false);
     }
