@@ -20,13 +20,20 @@ import { useEffect } from "react";
 
 import { useOrdersRealtime } from "@/hooks/useOrdersRealtime";
 import OneSignal from "react-onesignal";
-import { useAuth } from "@/hooks/useAuth";
+import { supabase } from "@/lib/supabase";
 
 export default function DashboardLayout() {
-  const user = useAuth();
-   useEffect(() => {
+  useEffect(() => {
     const initOneSignal = async () => {
       try {
+        const {
+          data: { session },
+        } = await supabase.auth.getSession();
+        const userId = session?.user?.id;
+        if (!userId) {
+          console.log("No active session found for OneSignal");
+          return;
+        }
         await OneSignal.init({
           appId: "2b1a2a08-fa45-43cd-b4ca-33e02f06a317",
           serviceWorkerPath: "/OneSignalSDKWorker.js",
@@ -35,8 +42,8 @@ export default function DashboardLayout() {
           },
         });
 
-        await OneSignal.login(user.id);
-        console.log("OneSignal linked to user:", user.id);
+        await OneSignal.login(userId);
+        console.log("OneSignal linked to user:", userId);
 
         console.log("OneSignal is ready!");
       } catch (err) {
@@ -95,4 +102,5 @@ export default function DashboardLayout() {
     </SidebarProvider>
   );
 }
+
 
