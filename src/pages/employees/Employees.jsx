@@ -9,14 +9,22 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { UserPen, Trash, UserRoundPlus } from "lucide-react";
+import {
+  Avatar,
+  AvatarFallback,
+  AvatarImage,
+  AvatarBadge,
+} from "@/components/ui/avatar";
+import { Trash, User } from "lucide-react";
 
 import { useLoaderData } from "react-router-dom";
 import InsertEmployee from "./InsertEmployee";
 import DeleteEmployee from "./DeleteEmployee";
 import UpdateEmployee from "./updateEmployee";
+import { useAuth } from "@/hooks/useAuth";
+
 export default function EmployeesPage() {
+  const { user } = useAuth();
   const { profiles } = useLoaderData() || {};
 
   return (
@@ -36,13 +44,20 @@ export default function EmployeesPage() {
           {profiles?.map((profile) => (
             <TableRow key={profile.id}>
               <TableCell>
+
                 <Avatar>
                   <AvatarImage
                     src={profile.avatar_url}
                     alt={profile.full_name}
                   />
-                  <AvatarFallback>user</AvatarFallback>
+                  <AvatarFallback>
+                    <User />
+                  </AvatarFallback>
+                  {user.id === profile.id && (
+                    <AvatarBadge className="bg-green-600 dark:bg-green-800" />
+                  )}
                 </Avatar>
+                
               </TableCell>
               <TableCell className="font-medium">{profile.full_name}</TableCell>
               <TableCell>{profile.email}</TableCell>

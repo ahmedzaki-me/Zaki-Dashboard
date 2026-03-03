@@ -40,11 +40,12 @@ const customerName = userData?.full_name || "New User";
       body: JSON.stringify({
         app_id: ONESIGNAL_APP_ID,
         include_external_user_ids: adminIds, 
-        
+        web_push_topic: record.id 
         headings: { en: "New Order!" },
         contents: { 
-          en: `Order #${record.invoice} by ${customerName}. Total: $${record.total_price}`,
+          en: `Order #${record.invoice} by ${customerName}. Total: \$${record.total_price}`,
         },
+
 // ${record.id}
         url: `https://zaki-dashboard.vercel.app/dashboard/orders/`,
         chrome_web_icon: "https://qpxgafmzblnjcztkwenf.supabase.co/storage/v1/object/public/avatars/icons/Zaki-Dashboard-Logo2.png",

@@ -37,8 +37,8 @@ export function NavUser() {
   const navigate = useNavigate();
   const handleLogout = async () => {
     try {
-      // await OneSignal.logout();
-      // console.log("OneSignal logged Out");
+      await OneSignal.logout();
+      console.log("OneSignal logged Out");
       const { error } = await supabase.auth.signOut();
 
       if (!error) {

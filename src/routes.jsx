@@ -10,18 +10,16 @@ import DashboardPage from "./pages/dashboard/DashboardPage";
 import MenuPage from "./pages/menu/MenuPage";
 import OrdersPage from "./pages/orders/OrdersPage";
 import NewOrder from "./pages/orders/NewOrder";
-import SettingPage from "./pages/Setting/SettingPage";
 import EmployeesPage from "./pages/employees/Employees";
-
+import ErrorPage from "./pages/ErrorPage";
 // Loaders (Logic)
+import { supabase } from "./lib/supabase";
 import { menuLoader } from "./pages/menu/menuLoader";
 import { ordersLoader } from "./pages/orders/ordersLoader";
 import { employeesLoader } from "./pages/employees/employeesLoader";
 //Fallback
 import MenuFallback from "./pages/menu/MenuFallback";
 import OrderFallback from "./pages/orders/OrderFallback";
-
-import { supabase } from "./lib/supabase";
 
 async function loginAction({ request }) {
   const formData = await request.formData();
@@ -54,6 +52,7 @@ export const router = createBrowserRouter(
           <DashboardLayout />
         </ProtectedRoute>
       ),
+      errorElement: <ErrorPage />,
       hydrateFallbackElement: <MenuFallback />,
       children: [
         {
@@ -96,6 +95,3 @@ export const router = createBrowserRouter(
   ],
   // { basename: "/test" },
 );
-
-
-
