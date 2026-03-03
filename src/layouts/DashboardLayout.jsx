@@ -24,30 +24,27 @@ import { useAuth } from "@/hooks/useAuth";
 
 export default function DashboardLayout() {
   const user = useAuth();
-  useEffect(() => {
+   useEffect(() => {
     const initOneSignal = async () => {
       try {
         await OneSignal.init({
           appId: "2b1a2a08-fa45-43cd-b4ca-33e02f06a317",
           serviceWorkerPath: "/OneSignalSDKWorker.js",
-
           notifyButton: {
             enable: true,
           },
         });
 
-        if (user?.id) {
-          await OneSignal.login(user.id);
-          console.log("OneSignal linked to user:", user.id);
-        }
+        await OneSignal.login(user.id);
+        console.log("OneSignal linked to user:", user.id);
+
         console.log("OneSignal is ready!");
       } catch (err) {
         console.error("OneSignal Init Error:", err);
       }
     };
-
     initOneSignal();
-  }, [user?.id]);
+  }, []);
 
   useOrdersRealtime();
 
@@ -98,3 +95,4 @@ export default function DashboardLayout() {
     </SidebarProvider>
   );
 }
+
