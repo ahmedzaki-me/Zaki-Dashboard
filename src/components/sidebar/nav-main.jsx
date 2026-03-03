@@ -19,6 +19,7 @@ import {
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { Link } from "react-router-dom";
+import NavSubscribe from "./nav-subscribe";
 
 export function NavMain({ items }) {
   return (
@@ -28,7 +29,11 @@ export function NavMain({ items }) {
         {items.map((item) => (
           <Collapsible key={item.title} asChild defaultOpen={item.isActive}>
             <SidebarMenuItem>
-              <SidebarMenuButton asChild tooltip={item.title}>
+              <SidebarMenuButton
+                asChild
+                tooltip={item.title}
+                className="font-semibold"
+              >
                 {item.isLike ? (
                   <Link to={item.url}>
                     <item.icon />
@@ -55,7 +60,7 @@ export function NavMain({ items }) {
                         <SidebarMenuSubItem key={subItem.title}>
                           <SidebarMenuSubButton asChild>
                             {subItem.switch ? (
-                              <div className="flex items-center space-x-2">
+                              <div className="flex items-center justify-between space-x-2 max-w-40">
                                 <Label htmlFor={subItem.title}>
                                   {subItem.title}
                                 </Label>
@@ -73,6 +78,7 @@ export function NavMain({ items }) {
                           </SidebarMenuSubButton>
                         </SidebarMenuSubItem>
                       ))}
+                      {item.title == "Settings" && <NavSubscribe />}
                     </SidebarMenuSub>
                   </CollapsibleContent>
                 </>

@@ -5,6 +5,7 @@ import {
   CreditCard,
   LogOut,
   Sparkles,
+  User,
 } from "lucide-react";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -36,8 +37,8 @@ export function NavUser() {
   const navigate = useNavigate();
   const handleLogout = async () => {
     try {
-      await OneSignal.logout();
-      console.log("OneSignal logged Out");
+      // await OneSignal.logout();
+      // console.log("OneSignal logged Out");
       const { error } = await supabase.auth.signOut();
 
       if (!error) {
@@ -59,7 +60,9 @@ export function NavUser() {
             >
               <Avatar className="h-8 w-8 rounded-lg">
                 <AvatarImage src={user.avatar_url} alt={user.full_name} />
-                <AvatarFallback className="rounded-lg">user</AvatarFallback>
+                <AvatarFallback className="rounded-lg">
+                  <User />
+                </AvatarFallback>
               </Avatar>
               <div className="grid flex-1 text-left text-sm leading-tight">
                 <span className="truncate font-medium">{user.full_name}</span>
@@ -78,7 +81,9 @@ export function NavUser() {
               <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
                 <Avatar className="h-8 w-8 rounded-lg">
                   <AvatarImage src={user.avatar_url} alt={user.full_name} />
-                  <AvatarFallback className="rounded-lg">user</AvatarFallback>
+                  <AvatarFallback className="rounded-lg">
+                    <User />
+                  </AvatarFallback>
                 </Avatar>
                 <div className="grid flex-1 text-left text-sm leading-tight">
                   <span className="truncate font-medium">{user.full_name}</span>

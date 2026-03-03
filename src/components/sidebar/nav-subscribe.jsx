@@ -6,6 +6,7 @@ import { supabase } from "@/lib/supabase";
 
 export default function NavSubscribe() {
   const [isSubscribed, setIsSubscribed] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     const checkStatus = () => {
@@ -17,6 +18,7 @@ export default function NavSubscribe() {
   }, []);
 
   const handleToggle = async (checked) => {
+    setIsLoading(false);
     try {
       if (checked) {
         const {
@@ -26,30 +28,37 @@ export default function NavSubscribe() {
 
         if (!userId) {
           console.log("No active session found for OneSignal");
+          setIsSubscribed(false);
           return;
         }
         await OneSignal.login(userId);
         setIsSubscribed(true);
+        setIsLoading(true);
+
         console.log("OneSignal Login Success");
       } else {
         await OneSignal.logout();
         setIsSubscribed(false);
+        setIsLoading(true);
         console.log("OneSignal Logout Success");
       }
     } catch (error) {
       console.error("Error toggling OneSignal subscription:", error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
   return (
-    <div className="flex items-center gap-4 p-2 ml-2">
+    <div className="flex items-center justify-between max-w-40 gap-4 p-2">
       <Label
         htmlFor="notifications-mode"
-        className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+        className={`text-sm font-medium leading-none ${isLoading && "cursor-not-allowed opacity-50"} `}
       >
         Subscribe
       </Label>
       <Switch
+        disabled={isLoading}
         size="sm"
         className="cursor-pointer"
         id="notifications-mode"
