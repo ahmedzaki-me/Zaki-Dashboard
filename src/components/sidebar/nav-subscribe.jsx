@@ -18,7 +18,7 @@ export default function NavSubscribe() {
   }, []);
 
   const handleToggle = async (checked) => {
-    setIsLoading(false);
+    setIsLoading(true);
     try {
       if (checked) {
         const {
@@ -68,3 +68,4 @@ export default function NavSubscribe() {
     </div>
   );
 }
+
