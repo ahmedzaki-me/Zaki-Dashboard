@@ -11,6 +11,7 @@ export default function NavSubscribe() {
   useEffect(() => {
     const checkOneSignalStatus = async () => {
       try {
+        await OneSignal.ready();
         const isOptedIn = OneSignal.User?.PushSubscription?.optedIn ?? false;
         const hasExternalId = !!OneSignal.User?.externalId;
 
@@ -53,6 +54,7 @@ export default function NavSubscribe() {
       }
     } catch (error) {
       console.error("Error toggling OneSignal subscription:", error);
+      setIsSubscribed(!checked);
     } finally {
       setIsLoading(false);
     }
