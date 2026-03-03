@@ -5,43 +5,62 @@ import { Switch } from "@/components/ui/switch";
 
 export default function NavSubscribe() {
   const [isSubscribed, setIsSubscribed] = useState(false);
+  const [isLoaded, setIsLoaded] = useState(false); 
 
   useEffect(() => {
-    const checkSubscription = () => {
-      setIsSubscribed(OneSignal.User.PushSubscription.optedIn);
+    const updateSubscriptionStatus = () => {
+      const status = OneSignal.User?.PushSubscription?.optedIn;
+      setIsSubscribed(!!status);
+      setIsLoaded(true);
     };
 
-    checkSubscription();
+    if (OneSignal.User?.PushSubscription) {
+      updateSubscriptionStatus();
+    }
+
+    const listener = (event) => {
+      setIsSubscribed(event.current.optedIn);
+    };
+
+    OneSignal.User?.PushSubscription?.addEventListener("change", listener);
+
+    return () => {
+      OneSignal.User?.PushSubscription?.removeEventListener("change", listener);
+    };
   }, []);
 
   const handleToggle = async (checked) => {
+    const previousState = isSubscribed;
+    setIsSubscribed(checked);
+
     try {
-      if (!checked) {
-        await OneSignal.User.PushSubscription.optOut();
-        setIsSubscribed(false);
-        console.log("Notifications disabled");
-      } else {
+      if (checked) {
         await OneSignal.User.PushSubscription.optIn();
-        setIsSubscribed(true);
-        console.log("Notifications enabled");
+      } else {
+        await OneSignal.User.PushSubscription.optOut();
       }
+      setIsSubscribed(!!OneSignal.User.PushSubscription.optedIn);
     } catch (error) {
-      console.error("Error toggling OneSignal subscription:", error);
+      console.error("OneSignal Error:", error);
+      setIsSubscribed(previousState);
     }
   };
 
+  if (!isLoaded)
+    return <div className="h-6 w-12 animate-pulse bg-gray-200 rounded-full" />;
+
   return (
-    <div className="flex items-center gap-4 p-2 ml-2">
+    <div className="flex items-center gap-4 p-2 ml-2 transition-opacity duration-300">
       <Label
         htmlFor="notifications-mode"
-        className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+        className="text-sm font-medium leading-none cursor-pointer peer-disabled:opacity-70"
       >
         Subscribe
       </Label>
       <Switch
         size="sm"
-        className="cursor-pointer"
         id="notifications-mode"
+        className="cursor-pointer"
         checked={isSubscribed}
         onCheckedChange={handleToggle}
       />
