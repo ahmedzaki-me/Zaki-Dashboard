@@ -24,19 +24,19 @@ export default function NavSubscribe() {
 
     const handleSubscriptionChange = (event) => {
       console.log("Subscription status changed:", event);
-      setIsSubscribed(event.current.optedIn);
+      setIsSubscribed(event);
     };
 
     OneSignal.User.PushSubscription.addEventListener(
       "change",
       handleSubscriptionChange,
     );
-    return () => {
-      OneSignal.User.PushSubscription.removeEventListener(
-        "change",
-        handleSubscriptionChange,
-      );
-    };
+    // return () => {
+    //   OneSignal.User.PushSubscription.removeEventListener(
+    //     "change",
+    //     handleSubscriptionChange,
+    //   );
+    // };
   }, []);
 
   const handleToggle = async (checked) => {
@@ -89,4 +89,3 @@ export default function NavSubscribe() {
     </div>
   );
 }
-
