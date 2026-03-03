@@ -27,6 +27,7 @@ import {
 import { supabase } from "@/lib/supabase";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
+import OneSignal from "react-onesignal";
 
 export function NavUser() {
   const { isMobile } = useSidebar();
@@ -34,9 +35,16 @@ export function NavUser() {
   const { user } = useAuth();
   const navigate = useNavigate();
   const handleLogout = async () => {
-    const { error } = await supabase.auth.signOut();
-    if (!error) {
-      navigate("/login");
+    try {
+      await OneSignal.logout();
+      console.log("OneSignal logged Out");
+      const { error } = await supabase.auth.signOut();
+
+      if (!error) {
+        navigate("/login");
+      }
+    } catch (err) {
+      console.log("Logout Error: ", err.message);
     }
   };
 
