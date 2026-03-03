@@ -11,10 +11,8 @@ export default function NavSubscribe() {
   useEffect(() => {
     const checkOneSignalStatus = async () => {
       try {
-        await OneSignal.ready();
         const isOptedIn = OneSignal.User?.PushSubscription?.optedIn ?? false;
         const hasExternalId = !!OneSignal.User?.externalId;
-
         setIsSubscribed(isOptedIn && hasExternalId);
       } catch (err) {
         console.error("Error checking OneSignal status:", err);
@@ -22,8 +20,23 @@ export default function NavSubscribe() {
         setIsLoading(false);
       }
     };
-
     checkOneSignalStatus();
+
+    const handleSubscriptionChange = (event) => {
+      console.log("Subscription status changed:", event);
+      setIsSubscribed(event);
+    };
+
+    OneSignal.User.PushSubscription.addEventListener(
+      "change",
+      handleSubscriptionChange,
+    );
+    return () => {
+      OneSignal.User.PushSubscription.removeEventListener(
+        "change",
+        handleSubscriptionChange,
+      );
+    };
   }, []);
 
   const handleToggle = async (checked) => {
@@ -42,14 +55,11 @@ export default function NavSubscribe() {
         }
         await OneSignal.Notifications.requestPermission();
         await OneSignal.login(userId);
-        setIsSubscribed(true);
-        setIsLoading(true);
 
         console.log("OneSignal Login Success");
       } else {
         await OneSignal.logout();
         setIsSubscribed(false);
-        setIsLoading(true);
         console.log("OneSignal Logout Success");
       }
     } catch (error) {
