@@ -55,6 +55,7 @@ export default function NavSubscribe() {
         }
         await OneSignal.Notifications.requestPermission();
         await OneSignal.login(userId);
+        setIsSubscribed(true);
 
         console.log("OneSignal Login Success");
       } else {
@@ -64,7 +65,7 @@ export default function NavSubscribe() {
       }
     } catch (error) {
       console.error("Error toggling OneSignal subscription:", error);
-      setIsSubscribed(!checked);
+      // setIsSubscribed(!checked);
     } finally {
       setIsLoading(false);
     }
