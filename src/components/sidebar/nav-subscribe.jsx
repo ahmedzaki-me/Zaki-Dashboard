@@ -6,21 +6,17 @@ import { supabase } from "@/lib/supabase";
 
 export default function NavSubscribe() {
   const [isSubscribed, setIsSubscribed] = useState(false);
-  // const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     const checkStatus = () => {
       const hasExternalId = !!OneSignal.User?.externalId;
-      const isOptedIn = !!OneSignal.User?.PushSubscription?.optedIn;
-      setIsSubscribed(hasExternalId && isOptedIn);
+      setIsSubscribed(hasExternalId);
     };
 
     checkStatus();
   }, []);
 
   const handleToggle = async (checked) => {
-    // if (isLoading) return;
-    // setIsLoading(true);
     try {
       if (checked) {
         const {
@@ -32,39 +28,33 @@ export default function NavSubscribe() {
           console.log("No active session found for OneSignal");
           return;
         }
-
         await OneSignal.login(userId);
-        await OneSignal.User.PushSubscription.optIn();
-
         setIsSubscribed(true);
         console.log("OneSignal Login Success");
       } else {
         await OneSignal.logout();
-        await OneSignal.User.PushSubscription.optOut();
-
         setIsSubscribed(false);
         console.log("OneSignal Logout Success");
       }
     } catch (error) {
-      console.error("OneSignal Identity Error:", error);
-      setIsSubscribed(!checked);
+      console.error("Error toggling OneSignal subscription:", error);
     }
   };
 
   return (
     <div className="flex items-center gap-4 p-2 ml-2">
       <Label
-        htmlFor="onesignal-auth"
-        className="text-sm font-semibold text-slate-700 cursor-pointer"
+        htmlFor="notifications-mode"
+        className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
       >
         Subscribe
       </Label>
       <Switch
-        id="onesignal-auth"
-        checked={isSubscribed}
-        onCheckedChange={handleToggle}
         size="sm"
         className="cursor-pointer"
+        id="notifications-mode"
+        checked={isSubscribed}
+        onCheckedChange={handleToggle}
       />
     </div>
   );
