@@ -54,6 +54,7 @@ export const router = createBrowserRouter(
           <DashboardLayout />
         </ProtectedRoute>
       ),
+      hydrateFallbackElement: <MenuFallback />,
       children: [
         {
           index: true,
@@ -95,5 +96,6 @@ export const router = createBrowserRouter(
   ],
   // { basename: "/test" },
 );
+
 
 
