@@ -13,6 +13,7 @@ import {
 import { NavMain } from "@/components/sidebar/nav-main";
 import { NavSecondary } from "@/components/sidebar/nav-secondary";
 import { NavUser } from "@/components/sidebar/nav-user";
+import NavSubscribe from "./nav-subscribe";
 import {
   Sidebar,
   SidebarContent,
@@ -126,6 +127,7 @@ export function AppSidebar({ ...props }) {
       </SidebarHeader>
       <SidebarContent>
         <NavMain items={sidebarItems} />
+        <NavSubscribe />
         <NavSecondary items={data.navSecondary} className="mt-auto" />
       </SidebarContent>
       <SidebarFooter>

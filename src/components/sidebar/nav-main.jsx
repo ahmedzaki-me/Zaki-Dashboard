@@ -62,7 +62,7 @@ export function NavMain({ items }) {
                                 <Switch
                                   id={subItem.title}
                                   size="sm"
-                                  className=" cursor-pointer"
+                                  className="cursor-pointer"
                                 />
                               </div>
                             ) : (
