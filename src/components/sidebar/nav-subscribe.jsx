@@ -6,15 +6,23 @@ import { supabase } from "@/lib/supabase";
 
 export default function NavSubscribe() {
   const [isSubscribed, setIsSubscribed] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const checkStatus = () => {
-      const hasExternalId = !!OneSignal.User?.externalId;
-      setIsSubscribed(hasExternalId);
+    const checkOneSignalStatus = async () => {
+      try {
+        const isOptedIn = OneSignal.User?.PushSubscription?.optedIn ?? false;
+        const hasExternalId = !!OneSignal.User?.externalId;
+
+        setIsSubscribed(isOptedIn && hasExternalId);
+      } catch (err) {
+        console.error("Error checking OneSignal status:", err);
+      } finally {
+        setIsLoading(false);
+      }
     };
 
-    checkStatus();
+    checkOneSignalStatus();
   }, []);
 
   const handleToggle = async (checked) => {
@@ -31,6 +39,7 @@ export default function NavSubscribe() {
           setIsSubscribed(false);
           return;
         }
+        await OneSignal.Notifications.requestPermission();
         await OneSignal.login(userId);
         setIsSubscribed(true);
         setIsLoading(true);
@@ -68,4 +77,3 @@ export default function NavSubscribe() {
     </div>
   );
 }
-
