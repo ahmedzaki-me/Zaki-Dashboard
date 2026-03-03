@@ -24,7 +24,7 @@ export default function NavSubscribe() {
 
     const handleSubscriptionChange = (event) => {
       console.log("Subscription status changed:", event);
-      setIsSubscribed(event);
+      setIsSubscribed(event.current.optedIn);
     };
 
     OneSignal.User.PushSubscription.addEventListener(
@@ -89,3 +89,4 @@ export default function NavSubscribe() {
     </div>
   );
 }
+
