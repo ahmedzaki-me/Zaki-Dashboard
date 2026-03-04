@@ -42,7 +42,11 @@ const fetchData = async (
 export const getItems = () => fetchData("items", "تعذر جلب العناصر");
 export const getCategories = () =>
   fetchData("categories", "تعذر جلب التصنيفات");
+
 export const getOrders = () =>
   fetchData("orders", "تعذر جلب الطلبات", "invoice", true);
+export const getOrderItems = () =>
+  fetchData("order_items", "تعذر جلب عناصر الطلب");
+
 export const getProfiles = () =>
   fetchData("profiles", "تعذر جلب المستخدمين", "role", true);

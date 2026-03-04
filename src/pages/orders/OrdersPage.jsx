@@ -12,6 +12,7 @@ import { Badge } from "@/components/ui/badge";
 import { Spinner } from "@/components/ui/spinner";
 
 import { useLoaderData } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const statusConfig = {
   completed:
@@ -21,10 +22,23 @@ const statusConfig = {
   processing: "bg-blue-100 text-blue-700 border-blue-200 hover:bg-blue-100",
   default: "bg-slate-100 text-slate-700 border-slate-200",
 };
+const formatDate = new Intl.DateTimeFormat("en", {
+  month: "short",
+  day: "numeric",
+  hour: "2-digit",
+  minute: "2-digit",
+  hour12: true,
+});
+
+const formatCurrency = new Intl.NumberFormat("en", {
+  style: "currency",
+  currency: "USD",
+});
 
 export default function OrdersPage() {
-  const { orders = [], profiles = [] } = useLoaderData() || {};
+  const navigate = useNavigate();
 
+  const { orders = [], profiles = [] } = useLoaderData() || {};
   const profilesMap = Object.fromEntries(
     profiles.map((p) => [p.id, p.full_name]),
   );
@@ -32,19 +46,6 @@ export default function OrdersPage() {
   const findUserName = (userId) => {
     return profilesMap[userId] ?? "Unknown User";
   };
-
-  const formatDate = new Intl.DateTimeFormat("en", {
-    month: "short",
-    day: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
-    hour12: true,
-  });
-
-  const formatCurrency = new Intl.NumberFormat("en", {
-    style: "currency",
-    currency: "USD",
-  });
 
   const dayTotal = formatCurrency.format(
     orders?.reduce(
@@ -78,8 +79,17 @@ export default function OrdersPage() {
 
         <TableBody>
           {orders?.map((order) => (
-            <TableRow key={order.id}>
-              <TableCell className="font-medium">#{order.invoice}</TableCell>
+            <TableRow
+              onClick={() => navigate(`${order.invoice}`)}
+              key={order.id}
+              className="cursor-pointer"
+            >
+              <TableCell className="font-medium py-3 transition-colors hover:bg-slate-50/80 group">
+                <span className="text-slate-400 group-hover:text-primary transition-colors">
+                  #
+                </span>
+                {order.invoice}
+              </TableCell>
               <TableCell>
                 <Badge
                   className={`capitalize ${statusConfig[order.status] || statusConfig.default}`}

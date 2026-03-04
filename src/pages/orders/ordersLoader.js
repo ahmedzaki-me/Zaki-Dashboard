@@ -1,10 +1,20 @@
-import { getOrders, getProfiles } from "../../lib/supabase";
+import {
+  getOrders,
+  getOrderItems,
+  getItems,
+  getProfiles,
+} from "@/lib/supabase";
 
 export const ordersLoader = async () => {
   try {
-    const [orders, profiles] = await Promise.all([getOrders(), getProfiles()]);
+    const [orders, orderItems, Items, profiles] = await Promise.all([
+      getOrders(),
+      getOrderItems(),
+      getItems(),
+      getProfiles(),
+    ]);
 
-    return { orders, profiles };
+    return { orders, orderItems, Items, profiles };
   } catch (error) {
     throw new Response("Failed to load menu data", { status: 500 });
   }

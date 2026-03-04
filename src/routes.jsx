@@ -9,6 +9,7 @@ import LoginPage from "./pages/auth/LoginPage";
 import DashboardPage from "./pages/dashboard/DashboardPage";
 import MenuPage from "./pages/menu/MenuPage";
 import OrdersPage from "./pages/orders/OrdersPage";
+import OrderDetails from "./pages/orders/OrderDetails";
 import NewOrder from "./pages/orders/NewOrder";
 import EmployeesPage from "./pages/employees/Employees";
 import ErrorPage from "./pages/ErrorPage";
@@ -53,7 +54,6 @@ export const router = createBrowserRouter(
         </ProtectedRoute>
       ),
       errorElement: <ErrorPage />,
-      hydrateFallbackElement: <MenuFallback />,
       children: [
         {
           index: true,
@@ -80,6 +80,12 @@ export const router = createBrowserRouter(
               element: <NewOrder />,
               loader: menuLoader,
               hydrateFallbackElement: <MenuFallback />,
+            },
+            {
+              path: ":orderInvoice",
+              element: <OrderDetails />,
+              loader: ordersLoader,
+              hydrateFallbackElement: <OrderFallback />,
             },
           ],
         },
