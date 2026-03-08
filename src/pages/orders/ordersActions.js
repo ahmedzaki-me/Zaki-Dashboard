@@ -12,6 +12,7 @@ export const handlePlaceOrder = async (userId, cartItems, subTotal, status) => {
       item_id: item.id,
       quantity: item.count,
       unit_price: item.price,
+      notes: item.notes,
     })),
   });
 
@@ -28,7 +29,6 @@ export const ChangeStatus = async (newStatus, orderId) => {
     .update({ status: newStatus })
     .eq("id", orderId)
     .select();
-  // .single();
 
   if (error) {
     console.error("Order Error:", error.message);

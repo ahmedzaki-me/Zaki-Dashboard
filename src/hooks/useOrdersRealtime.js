@@ -7,10 +7,10 @@ export function useOrdersRealtime() {
   const { revalidate } = useRevalidator();
   const channelRef = useRef(null);
   const timeoutRef = useRef(null);
+  const recentInserts = useRef(new Set());
 
   const triggerRevalidate = useCallback(() => {
     clearTimeout(timeoutRef.current);
-
     timeoutRef.current = setTimeout(() => {
       revalidate();
     }, 700);
@@ -25,11 +25,22 @@ export function useOrdersRealtime() {
         "postgres_changes",
         { event: "*", schema: "public", table: "orders" },
         (payload) => {
-
           if (payload.eventType === "INSERT") {
-            toast.success(`New Order! Invoice: #${payload.new.invoice}`, { id: "order-change" });
+            toast.success(`New Order! Invoice: #${payload.new.invoice}`, {
+              id: "order-change",
+            });
+
+            recentInserts.current.add(payload.new.id);
+            setTimeout(
+              () => recentInserts.current.delete(payload.new.id),
+              2000,
+            );
           } else if (payload.eventType === "UPDATE") {
-            toast.info(`Order #${payload.new.invoice} has been updated`, { id: "order-change" });
+            if (!recentInserts.current.has(payload.new.id)) {
+              toast.info(`Order #${payload.new.invoice} has been updated`, {
+                id: "order-change",
+              });
+            }
           } else if (payload.eventType === "DELETE") {
             toast.warning(`An order was removed`, { id: "order-change" });
           }

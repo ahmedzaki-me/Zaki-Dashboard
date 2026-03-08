@@ -92,6 +92,7 @@ export default function InsertEmployee() {
           <UserRoundPlus /> Add Employee
         </Button>
       </DialogTrigger>
+      
       <DialogContent className="sm:max-w-sm">
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">

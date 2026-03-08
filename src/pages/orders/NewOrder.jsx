@@ -27,6 +27,7 @@ import { useLoaderData } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 import Cart from "./cartActions";
 import { handlePlaceOrder } from "./ordersActions";
+import { AddNotes } from "./AddNots";
 
 const statusConfig = {
   completed:
@@ -51,6 +52,7 @@ export default function NewOrder() {
     increaseCount,
     decreaseCount,
     removeFromCart,
+    addNotes,
   } = Cart();
 
   const filteredItems = React.useMemo(() => {
@@ -71,7 +73,7 @@ export default function NewOrder() {
       toast.warning("Your Cart is Empty");
     } else {
       setIsSubmitting(true);
-      const { success } = await handlePlaceOrder(
+      const { success, data } = await handlePlaceOrder(
         user.id,
         cartItems,
         subTotal,
@@ -79,7 +81,6 @@ export default function NewOrder() {
       );
       setIsSubmitting(false);
       if (success) {
-        // toast.success("successfully");
         setCartItems([]);
         openCart && setOpenCart(false);
       } else {
@@ -140,7 +141,6 @@ export default function NewOrder() {
                         className="relative mx-auto w-full max-w-sm pt-0 overflow-hidden items-between"
                         key={item.id}
                       >
-                        {/* <div className="absolute inset-0 z-30 aspect-video bg-black/25 " /> */}
                         <img
                           src={item.image_url}
                           alt={item.name}
@@ -172,9 +172,7 @@ export default function NewOrder() {
                         </Badge>
 
                         <CardHeader className="flex-1 ">
-                          {/* <CardAction></CardAction> */}
                           <CardTitle className="text-xl">{item.name}</CardTitle>
-                          {/* <CardDescription>{item.description}</CardDescription> */}
                         </CardHeader>
 
                         <CardFooter className="flex justify-between items-center">
@@ -210,7 +208,7 @@ export default function NewOrder() {
                               onClick={() => {
                                 setCartItems((prev) => [
                                   ...prev,
-                                  { ...item, count: 1 },
+                                  { ...item, count: 1, notes: "" },
                                 ]);
                               }}
                             >
@@ -334,9 +332,7 @@ export default function NewOrder() {
                         </Button>
                       </ButtonGroup>
 
-                      <Button size="x" variant="outline" className="py-1 px-2">
-                        Add Nots
-                      </Button>
+                      <AddNotes itemId={item.id} addNotes={addNotes} />
 
                       <CircleX
                         size={18}

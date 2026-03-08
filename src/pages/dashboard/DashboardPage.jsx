@@ -155,7 +155,7 @@ function YearlyBarChart({ yearlyBreakdown }) {
       </CardHeader>
       <CardContent>
         <div className="overflow-x-auto">
-          <ChartContainer config={barChartConfig} className="h-65 min-w-[500px] w-full">
+          <ChartContainer config={barChartConfig} className="h-65 min-w-125 w-full">
             <BarChart data={data} barSize={28}>
               <CartesianGrid vertical={false} strokeDasharray="3 3" />
               <XAxis

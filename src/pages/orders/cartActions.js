@@ -3,7 +3,6 @@ import { useState, useEffect } from "react";
 export default function Cart() {
   const cartItemsInLS = JSON.parse(localStorage.getItem("cartItemsInLS")) || [];
   const [cartItems, setCartItems] = useState(cartItemsInLS || []);
-  // const [showCart, setShowCart] = useState(false);
   const countOfItems = cartItems.reduce((total, item) => total + item.count, 0);
   const subTotal = cartItems.reduce(
     (total, item) => total + item.price * item.count,
@@ -18,6 +17,14 @@ export default function Cart() {
     setCartItems((prev) =>
       prev.map((item) =>
         item.id === itemtId ? { ...item, count: item.count + 1 } : item,
+      ),
+    );
+  }
+
+  function addNotes(itemtId, notes) {
+    setCartItems((prev) =>
+      prev.map((item) =>
+        item.id === itemtId ? { ...item, notes } : item,
       ),
     );
   }
@@ -45,10 +52,9 @@ export default function Cart() {
     setCartItems,
     countOfItems,
     subTotal,
-    // showCart,
-    // setShowCart,
     increaseCount,
     decreaseCount,
     removeFromCart,
+    addNotes,
   };
 }
