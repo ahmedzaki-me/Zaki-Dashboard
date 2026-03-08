@@ -87,7 +87,7 @@ export default function MenuPage() {
                         src={item.image_url}
                         alt={item.name}
                         loading="lazy"
-                        className="relative z-20 aspect-video w-full object-cover dark:brightness-40"
+                        className="relative z-20 aspect-video w-full object-cover "
                       />
                       <Badge
                         variant="secondary"
@@ -100,10 +100,14 @@ export default function MenuPage() {
                         <CardAction className="flex flex-col gap-5">
                           <Badge
                             variant="secondary"
-                            className={`font-bold text-sm   ${
-                              item.stock_quantity > 5
-                                ? "bg-green-50 text-green-700 dark:bg-green-950 dark:text-green-300"
-                                : "bg-red-50 text-red-700 dark:bg-red-950 dark:text-red-300"
+                            className={`font-bold text-sm ${
+                              item.stock_quantity == 0
+                                ? "text-[#888]"
+                                : item.stock_quantity > 10
+                                  ? "bg-green-50 text-green-700 dark:bg-green-950 dark:text-green-300"
+                                  : item.stock_quantity < 5
+                                    ? "bg-red-50 text-red-700 dark:bg-red-950 dark:text-red-300"
+                                    : "bg-yellow-100 text-yellow-700 dark:bg-yellow-950 dark:text-yellow-300"
                             }`}
                           >
                             Stock: {item.stock_quantity}

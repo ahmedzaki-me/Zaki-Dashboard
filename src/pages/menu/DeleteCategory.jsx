@@ -24,8 +24,6 @@ export default function DeleteCategory({ category, children }) {
       toast.success("The category was scanned successfully");
       revalidator.revalidate();
     } else {
-      console.log(error);
-
       toast.error("The category was not cleared");
     }
   };

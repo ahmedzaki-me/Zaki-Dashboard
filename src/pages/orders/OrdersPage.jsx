@@ -13,13 +13,14 @@ import { Spinner } from "@/components/ui/spinner";
 
 import { useLoaderData } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-
+import { UpdateStatus } from "./UpdateStatus";
+import { ChevronDownIcon } from "lucide-react";
 const statusConfig = {
   completed:
     "bg-emerald-100 text-emerald-700 border-emerald-200 hover:bg-emerald-100",
-  pending: "bg-amber-100 text-amber-700 border-amber-200 hover:bg-amber-100",
+  returned: "bg-amber-100 text-amber-700 border-amber-200 hover:bg-amber-100",
   cancelled: "bg-rose-100 text-rose-700 border-rose-200 hover:bg-rose-100",
-  processing: "bg-blue-100 text-blue-700 border-blue-200 hover:bg-blue-100",
+  delivery: "bg-blue-100 text-blue-700 border-blue-200 hover:bg-blue-100",
   default: "bg-slate-100 text-slate-700 border-slate-200",
 };
 const formatDate = new Intl.DateTimeFormat("en", {
@@ -50,13 +51,15 @@ export default function OrdersPage() {
   const dayTotal = formatCurrency.format(
     orders?.reduce(
       (acc, order) =>
-        acc + (order.status !== "cancelled" ? order.total_price || 0 : 0),
+        acc + (order.status === "completed" ? order.total_price || 0 : 0),
       0,
     ),
   );
 
   return (
     <>
+      <UpdateStatus />
+
       <Table>
         <TableCaption>A list of your recent invoices.</TableCaption>
 
@@ -82,25 +85,36 @@ export default function OrdersPage() {
             <TableRow
               onClick={() => navigate(`${order.invoice}`)}
               key={order.id}
-              className="cursor-pointer"
+              className="cursor-pointer group"
             >
-              <TableCell className="font-medium py-3 transition-colors hover:bg-slate-50/80 group">
+              <TableCell className="font-medium py-3 transition-colors">
                 <span className="text-slate-400 group-hover:text-primary transition-colors">
                   #
                 </span>
                 {order.invoice}
               </TableCell>
-              <TableCell>
-                <Badge
-                  className={`capitalize ${statusConfig[order.status] || statusConfig.default}`}
-                >
-                  {order.status === "processing" && (
-                    <Spinner data-icon="inline-end" />
-                  )}
-                  {order.status}
-                </Badge>
+              <TableCell onClick={(e) => e.stopPropagation()}>
+                {order.status === "cancelled" || order.status === "returned" ? (
+                  <Badge
+                    className={`capitalize ${statusConfig[order.status] || statusConfig.default}`}
+                  >
+                    {order.status}
+                  </Badge>
+                ) : (
+                  <UpdateStatus orderId={order.id}>
+                    <Badge
+                      className={`capitalize ${statusConfig[order.status] || statusConfig.default}`}
+                    >
+                      {order.status === "delivery" && (
+                        <Spinner data-icon="inline-end" />
+                      )}
+                      {order.status}
+                      <ChevronDownIcon />
+                    </Badge>
+                  </UpdateStatus>
+                )}
               </TableCell>
-              <TableCell className="">
+              <TableCell>
                 {formatDate.format(new Date(order.created_at))}
               </TableCell>
               <TableCell>{order.payment_method}</TableCell>

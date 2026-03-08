@@ -77,11 +77,6 @@ export default function OrderDetails() {
     itemDetails: orderItemsMap[orderItem.item_id],
   }));
 
-  console.log("findOrder: ", findOrder);
-  console.log("findOrderItems: ", findOrderItems);
-  console.log("fullItems: ", fullItems);
-
-  console.log("findUserName: ", findUserName);
 
   const Total = findOrderItems?.reduce(
     (acc, orderItem) =>

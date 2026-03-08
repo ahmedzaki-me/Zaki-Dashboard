@@ -76,7 +76,7 @@ export default function NavSubscribe() {
     <div className="flex items-center justify-between max-w-40 gap-4 p-2">
       <Label
         htmlFor="notifications-mode"
-        className={`text-sm font-medium leading-none ${isLoading && "cursor-not-allowed opacity-50"} `}
+        className={`text-sm leading-none ${isLoading && "cursor-not-allowed opacity-50"} `}
       >
         Subscribe
       </Label>

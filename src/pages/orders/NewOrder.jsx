@@ -1,24 +1,26 @@
 import { useState } from "react";
 import { Badge } from "@/components/ui/badge";
-import {
-  Card,
-  CardAction,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { ScrollArea } from "@/components/ui/scroll-area";
+import { Card, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
-import {
-  ButtonGroup,
-  ButtonGroupSeparator,
-} from "@/components/ui/button-group";
+import { ButtonGroup } from "@/components/ui/button-group";
 import { toast } from "sonner";
 import { Spinner } from "@/components/ui/spinner";
-import { MinusIcon, PlusIcon, ShoppingCart, CircleX } from "lucide-react";
+import {
+  MinusIcon,
+  PlusIcon,
+  ShoppingCart,
+  CircleX,
+  ChevronDownIcon,
+} from "lucide-react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 import * as React from "react";
 import { useLoaderData } from "react-router-dom";
@@ -26,8 +28,16 @@ import { useAuth } from "@/hooks/useAuth";
 import Cart from "./cartActions";
 import { handlePlaceOrder } from "./ordersActions";
 
+const statusConfig = {
+  completed:
+    "bg-emerald-100 text-emerald-700 border-emerald-200 hover:bg-emerald-100",
+  delivery: "bg-blue-100 text-blue-700 border-blue-200 hover:bg-blue-100",
+  default: "bg-slate-100 text-slate-700 border-slate-200",
+};
+
 export default function NewOrder() {
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [status, setStatus] = useState("delivery");
 
   const [openCart, setOpenCart] = useState(false);
   const [activeCategoryId, setActiveCategoryId] = useState("all");
@@ -56,15 +66,16 @@ export default function NewOrder() {
   const itemIsExist = (item) => cartMap.has(item.id);
   const getItemFromLS = (id) => cartMap.get(id);
 
-  const handleOrder = async () => {
+  const handleOrder = async (status) => {
     if (cartItems.length < 1) {
-      toast.error("Your Cart is Empty");
+      toast.warning("Your Cart is Empty");
     } else {
       setIsSubmitting(true);
-      const { success, data } = await handlePlaceOrder(
+      const { success } = await handlePlaceOrder(
         user.id,
         cartItems,
         subTotal,
+        status,
       );
       setIsSubmitting(false);
       if (success) {
@@ -241,6 +252,38 @@ export default function NewOrder() {
               </span>
             </div>
 
+            <ButtonGroup className="absolute top-2 right-2">
+              <Button variant="outline">
+                <Badge
+                  className={`capitalize ${statusConfig[status] || statusConfig.default}`}
+                >
+                  {status}
+                </Badge>
+              </Button>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="outline" className="pl-2!">
+                    <ChevronDownIcon />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-fit">
+                  <DropdownMenuGroup>
+                    <DropdownMenuItem onClick={() => setStatus("delivery")}>
+                      <Badge className="capitalize bg-blue-100 text-blue-700 border-blue-200 hover:bg-blue-100">
+                        Delivery
+                      </Badge>
+                    </DropdownMenuItem>
+
+                    <DropdownMenuItem onClick={() => setStatus("completed")}>
+                      <Badge className="bg-emerald-100 text-emerald-700 border-emerald-200 hover:bg-emerald-100">
+                        Completed
+                      </Badge>
+                    </DropdownMenuItem>
+                  </DropdownMenuGroup>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </ButtonGroup>
+
             <Separator />
 
             <div className="w-full scrollbar-thin flex-1 p-1 overflow-y-auto overscroll-none">
@@ -312,22 +355,11 @@ export default function NewOrder() {
                 <div>Total: </div>
                 <div>${subTotal}</div>
               </div>
-              {/* 
-              <Button type="submit" disabled={isSubmitting}>
-                {isSubmitting ? (
-                  <>
-                    <Spinner className="mr-2" />
-                    Saving...
-                  </>
-                ) : (
-                  "Save"
-                )}
-              </Button> */}
 
               <Button
                 disabled={isSubmitting}
                 className="w-full text-xl font-semibold py-5 rounded-1!"
-                onClick={() => handleOrder()}
+                onClick={() => handleOrder(status)}
               >
                 {isSubmitting ? (
                   <>

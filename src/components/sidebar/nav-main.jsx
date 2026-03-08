@@ -20,6 +20,7 @@ import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { Link } from "react-router-dom";
 import NavSubscribe from "./nav-subscribe";
+import NavDarkMode from "./nav-darkMode";
 
 export function NavMain({ items }) {
   return (
@@ -59,12 +60,14 @@ export function NavMain({ items }) {
                       {item.items?.map((subItem) => (
                         <SidebarMenuSubItem key={subItem.title}>
                           <SidebarMenuSubButton asChild>
+                            
                             {subItem.switch ? (
                               <div className="flex items-center justify-between space-x-2 max-w-40">
                                 <Label htmlFor={subItem.title}>
                                   {subItem.title}
                                 </Label>
                                 <Switch
+                                  disabled
                                   id={subItem.title}
                                   size="sm"
                                   className="cursor-pointer"
@@ -78,7 +81,12 @@ export function NavMain({ items }) {
                           </SidebarMenuSubButton>
                         </SidebarMenuSubItem>
                       ))}
-                      {item.title == "Settings" && <NavSubscribe />}
+                      {item.title == "Settings" && (
+                        <>
+                          <NavDarkMode />
+                          <NavSubscribe />
+                        </>
+                      )}
                     </SidebarMenuSub>
                   </CollapsibleContent>
                 </>

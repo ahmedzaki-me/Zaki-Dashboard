@@ -23,15 +23,16 @@ export function useOrdersRealtime() {
       .channel("orders-realtime")
       .on(
         "postgres_changes",
-        { event: "INSERT", schema: "public", table: "orders" },
+        { event: "*", schema: "public", table: "orders" },
         (payload) => {
-          toast.success(
-            `New Order! Invoice Number:
-            #${payload.new.invoice}`,
-            {
-              id: "new-order",
-            },
-          );
+
+          if (payload.eventType === "INSERT") {
+            toast.success(`New Order! Invoice: #${payload.new.invoice}`, { id: "order-change" });
+          } else if (payload.eventType === "UPDATE") {
+            toast.info(`Order #${payload.new.invoice} has been updated`, { id: "order-change" });
+          } else if (payload.eventType === "DELETE") {
+            toast.warning(`An order was removed`, { id: "order-change" });
+          }
 
           triggerRevalidate();
         },

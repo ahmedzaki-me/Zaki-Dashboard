@@ -37,7 +37,7 @@ export function NavUser() {
   const navigate = useNavigate();
   const handleLogout = async () => {
     try {
-      await OneSignal.logout();
+      OneSignal.logout();
       console.log("OneSignal logged Out");
       const { error } = await supabase.auth.signOut();
 
@@ -91,15 +91,19 @@ export function NavUser() {
                 </div>
               </div>
             </DropdownMenuLabel>
-            <DropdownMenuSeparator />
-            <DropdownMenuGroup>
+            {/* <DropdownMenuSeparator /> */}
+            {/*<DropdownMenuGroup>
+
               <DropdownMenuItem>
                 <Sparkles />
                 Upgrade to Pro
               </DropdownMenuItem>
+
             </DropdownMenuGroup>
-            <DropdownMenuSeparator />
-            <DropdownMenuGroup>
+
+            <DropdownMenuSeparator /> */}
+
+            {/* <DropdownMenuGroup>
               <DropdownMenuItem>
                 <BadgeCheck />
                 Account
@@ -112,7 +116,8 @@ export function NavUser() {
                 <Bell />
                 Notifications
               </DropdownMenuItem>
-            </DropdownMenuGroup>
+            </DropdownMenuGroup> */}
+
             <DropdownMenuSeparator />
             <DropdownMenuItem onClick={handleLogout}>
               <LogOut />

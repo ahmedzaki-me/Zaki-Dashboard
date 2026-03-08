@@ -18,6 +18,7 @@ import { supabase } from "./lib/supabase";
 import { menuLoader } from "./pages/menu/menuLoader";
 import { ordersLoader } from "./pages/orders/ordersLoader";
 import { employeesLoader } from "./pages/employees/employeesLoader";
+import { dashboardLoader } from "./pages/dashboard/dashboardLoader";
 //Fallback
 import MenuFallback from "./pages/menu/MenuFallback";
 import OrderFallback from "./pages/orders/OrderFallback";
@@ -53,11 +54,13 @@ export const router = createBrowserRouter(
           <DashboardLayout />
         </ProtectedRoute>
       ),
+      hydrateFallbackElement: <MenuFallback />,
       errorElement: <ErrorPage />,
       children: [
         {
           index: true,
           element: <DashboardPage />,
+          loader: dashboardLoader,
         },
         {
           path: "menu",

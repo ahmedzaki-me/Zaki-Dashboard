@@ -50,7 +50,6 @@ export default function AddCategory({ owner_id }) {
     const { success, data } = await insertCategory(owner_id, values);
     if (success && data.length != 0) {
       toast.success("insertion operation successfully");
-      console.log("data: ", data);
       form.reset();
       setTimeout(() => {
         revalidator.revalidate();

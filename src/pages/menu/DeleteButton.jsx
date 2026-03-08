@@ -25,9 +25,6 @@ export default function AlertDialogDestructive({ id, itemName }) {
       toast.success("The item was scanned successfully");
       revalidator.revalidate();
     } else {
-      console.log(error);
-      console.log(data);
-
       toast.error("The item was not cleared");
     }
   };
@@ -37,7 +34,7 @@ export default function AlertDialogDestructive({ id, itemName }) {
       <AlertDialogTrigger asChild>
         <Button
           variant="destructive"
-          className="rounded-full p-5 bg-red-50 text-red-600 border border-red-200 hover:bg-red-600 hover:text-white transition-colors duration-300"
+          className="rounded-full p-5 dark:bg-amber-100 dark:text-red-600 dark:hover:text-amber-100 dark:hover:bg-red-600 bg-red-50 text-red-600 border border-red-200 hover:bg-red-600 hover:text-white  transition-colors duration-300"
         >
           <TrashIcon />
         </Button>

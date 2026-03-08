@@ -54,12 +54,12 @@ const data = {
       isActive: true,
 
       items: [
+        // {
+        //   title: "Dark Mode",
+        //   switch: true,
+        // },
         {
-          title: "Dark Mode",
-          switch: true,
-        },
-        {
-          title: "Language",
+          title: "Arabic",
           switch: true,
         },
       ],
@@ -81,12 +81,12 @@ const data = {
   navSecondary: [
     {
       title: "Support",
-      url: "#",
+      url: "https://www.ahmedzaki.me",
       icon: LifeBuoy,
     },
     {
       title: "Feedback",
-      url: "#",
+      url: "https://www.ahmedzaki.me",
       icon: Send,
     },
   ],
@@ -107,7 +107,7 @@ export function AppSidebar({ ...props }) {
           <SidebarMenuItem>
             <SidebarMenuButton size="lg" asChild>
               <Link to="../dashboard">
-                <div className="bg-sidebar-primary text-sidebar-primary-foreground flex aspect-square size-8 items-center justify-center rounded-[3px] overflow-hidden">
+                <div className="size-8 rounded-[3px] overflow-hidden">
                   <img
                     src="/Zaki-Dashboard-Logo2.png"
                     alt="Zaki-Dashboard-Logo.png"
@@ -118,7 +118,7 @@ export function AppSidebar({ ...props }) {
                   <span className="truncate font-medium">Zaki Dashboard</span>
                   <span className="truncate text-xs">
                     Plan:{" "}
-                    <span className="text-green-500 font-semibold">Free</span>
+                    <span className="text-green-600 font-semibold">Free</span>
                   </span>
                 </div>
               </Link>

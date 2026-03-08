@@ -22,7 +22,7 @@ import InsertEmployee from "./InsertEmployee";
 import DeleteEmployee from "./DeleteEmployee";
 import UpdateEmployee from "./updateEmployee";
 import { useAuth } from "@/hooks/useAuth";
-
+import { UpdateStatus } from "../orders/UpdateStatus";
 export default function EmployeesPage() {
   const { user } = useAuth();
   const { profiles } = useLoaderData() || {};
@@ -44,7 +44,6 @@ export default function EmployeesPage() {
           {profiles?.map((profile) => (
             <TableRow key={profile.id}>
               <TableCell>
-
                 <Avatar>
                   <AvatarImage
                     src={profile.avatar_url}
@@ -57,7 +56,6 @@ export default function EmployeesPage() {
                     <AvatarBadge className="bg-green-600 dark:bg-green-800" />
                   )}
                 </Avatar>
-                
               </TableCell>
               <TableCell className="font-medium">{profile.full_name}</TableCell>
               <TableCell>{profile.email}</TableCell>
@@ -66,7 +64,7 @@ export default function EmployeesPage() {
                 <DeleteEmployee employee={profile}>
                   <Button
                     variant="destructive"
-                    className="bg-red-50 text-red-600 border border-red-200 hover:bg-red-600 hover:text-white transition-colors duration-300"
+                    className="bg-red-50 dark:bg-amber-50 dark:text-red-600 dark:hover:text-amber-100 dark:hover:bg-red-600 text-red-600 border border-red-200 hover:bg-red-600 hover:text-white transition-colors duration-300"
                   >
                     <Trash />
                   </Button>
@@ -79,6 +77,7 @@ export default function EmployeesPage() {
         </TableBody>
       </Table>
       <InsertEmployee />
+      <UpdateStatus />
     </>
   );
 }
