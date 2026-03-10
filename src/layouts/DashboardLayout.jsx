@@ -22,6 +22,8 @@ import { useOrdersRealtime } from "@/hooks/useOrdersRealtime";
 import OneSignal from "react-onesignal";
 import { supabase } from "@/lib/supabase";
 
+import ThemeSwitcher from "@/components/shared/ThemeSwitcher";
+
 export default function DashboardLayout() {
   useEffect(() => {
     const initOneSignal = async () => {
@@ -95,6 +97,7 @@ export default function DashboardLayout() {
         </header>
 
         <div className=" flex relative flex-1 flex-col gap-4 p-4 pt-0">
+          <ThemeSwitcher />
           <Outlet />
           <Toaster position="top-center" richColors closeButton />
         </div>
