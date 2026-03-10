@@ -492,6 +492,13 @@ export default function ThemeSwitcher() {
 
   return (
     <>
+      {open && (
+        <div
+          className="fixed inset-0 z-40"
+          onClick={() => setOpen(false)}
+          aria-hidden="true"
+        />
+      )}
       <button
         onClick={() => setOpen((v) => !v)}
         className="flex h-10 w-5 items-center justify-center rounded-l-md border
