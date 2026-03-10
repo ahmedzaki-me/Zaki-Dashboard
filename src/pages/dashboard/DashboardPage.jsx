@@ -155,7 +155,10 @@ function YearlyBarChart({ yearlyBreakdown }) {
       </CardHeader>
       <CardContent>
         <div className="overflow-x-auto">
-          <ChartContainer config={barChartConfig} className="h-65 min-w-125 w-full">
+          <ChartContainer
+            config={barChartConfig}
+            className="h-65 min-w-125 w-full"
+          >
             <BarChart data={data} barSize={28}>
               <CartesianGrid vertical={false} strokeDasharray="3 3" />
               <XAxis
@@ -295,14 +298,14 @@ function CashierTable({ cashierStats }) {
                   <TableCell className="text-center">
                     <Badge variant="secondary">{c.visitors}</Badge>
                   </TableCell>
-                  <TableCell className="text-right font-semibold text-orange-500">
+                  <TableCell className="text-right font-semibold text-chart-3">
                     {fmt(c.totalSales)}
                   </TableCell>
                   <TableCell className="text-right">
                     <div className="flex items-center justify-end gap-2">
                       <div className="h-2 w-20 rounded-full bg-muted overflow-hidden">
                         <div
-                          className="h-full rounded-full bg-orange-400"
+                          className="h-full rounded-full bg-chart-2"
                           style={{ width: `${share}%` }}
                         />
                       </div>
