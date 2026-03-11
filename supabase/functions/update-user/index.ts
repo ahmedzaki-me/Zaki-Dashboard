@@ -52,27 +52,24 @@ serve(async (req) => {
 
     if (!targetProfile) throw new Error("Target user not found");
 
-    if (requesterProfile.role !== "admin" && requesterProfile.role !== "owner") {
-        throw new Error("Unauthorized: Only Admins or Owners can manage users");
-      }
-
     if (requesterProfile.role === "admin") {
-      if (targetProfile.role === "admin" || targetProfile.role === "owner") {
+      const isSelf = requester.id === userId; 
+
+      if (!isSelf && (targetProfile.role === "admin" || targetProfile.role === "owner")) {
         throw new Error("Admins cannot update other admins or owners");
       }
       if (role === "admin" || role === "owner") {
         throw new Error("Admins cannot promote users to admin or owner roles");
       }
-    }
+}
 
-    if (role === "owner") {
-      throw new Error("System Error: Adding or promoting to 'Owner' is not allowed via this function.");
-    }
-    if (requesterProfile.role === "owner") {
-      if (requester.id === userId && role && role !== "owner") {
-        throw new Error("Owner cannot downgrade their own role");
-      }
-    }
+if (role === "owner" && requester.id !== userId) {
+  throw new Error("Cannot promote another user to owner.");
+}
+
+if (requesterProfile.role === "owner" && requester.id === userId && role && role !== "owner") {
+  throw new Error("Owner cannot downgrade their own role");
+}
 
   const userMetadata: any = {};
     if (name) userMetadata.full_name = name;

@@ -22,6 +22,7 @@ serve(async (req) => {
 
 const authHeader = req.headers.get("Authorization");
 if (!authHeader) throw new Error("Missing auth header");
+
 const supabaseUser = createClient(
   Deno.env.get('SUPABASE_URL') ?? '',
   Deno.env.get('SUPABASE_ANON_KEY') ?? '',
