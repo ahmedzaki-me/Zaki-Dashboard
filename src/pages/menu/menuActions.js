@@ -1,6 +1,5 @@
 import { supabase } from "@/lib/supabase";
 
-
 export async function deleteItem(id) {
   const { data, error } = await supabase
     .from("items")
@@ -19,7 +18,12 @@ export async function insertItem(owner_id, category_id, values) {
   let imageUrl = values.currentImageUrl;
 
   if (values.image instanceof Blob) {
-    const fileName = `${values.name.toString(36).substring(2)}.webp`;
+    const safeName = values.name
+      .replace(/\s+/g, "_")
+      .replace(/[^\w]/g, "")
+      .toLowerCase();
+    const fileName = `${safeName}_${Date.now()}.webp`;
+
     const { data: uploadData, error: uploadError } = await supabase.storage
       .from("item-images")
       .upload(`items/${fileName}`, values.image);
@@ -58,7 +62,12 @@ export async function updateItem(id, values) {
   let imageUrl = values.currentImageUrl;
 
   if (values.image instanceof Blob) {
-    const fileName = `${values.name.toString(36).substring(2)}.webp`;
+    const safeName = values.name
+      .replace(/\s+/g, "_")
+      .replace(/[^\w]/g, "")
+      .toLowerCase();
+    const fileName = `${safeName}_${Date.now()}.webp`;
+
     const { data: uploadData, error: uploadError } = await supabase.storage
       .from("item-images")
       .upload(`items/${fileName}`, values.image);
@@ -110,7 +119,6 @@ export async function insertCategory(owner_id, values) {
   }
   return { success: true, data };
 }
-
 
 export async function updateCategory(id, values) {
   const { data, error } = await supabase

@@ -499,6 +499,7 @@ export default function ThemeSwitcher() {
           aria-hidden="true"
         />
       )}
+
       <button
         onClick={() => setOpen((v) => !v)}
         className="flex h-10 w-5 items-center justify-center rounded-l-md border
@@ -514,7 +515,12 @@ export default function ThemeSwitcher() {
         )}
       </button>
 
-      <div className="fixed right-0 top-1/2 -translate-y-1/2 z-50 flex items-center">
+      <div
+        className={cn(
+          "fixed right-0 top-1/2 -translate-y-1/2 z-50 flex items-center",
+          open ? "pointer-events-auto" : "pointer-events-none",
+        )}
+      >
         <div
           className={cn(
             "transition-transform duration-300 ease-in-out",

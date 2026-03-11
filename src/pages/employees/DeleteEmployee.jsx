@@ -19,7 +19,7 @@ export default function DeleteEmployee({ employee, children }) {
   const revalidator = useRevalidator();
 
   const handleDelete = async () => {
-    const { error } = await deleteEmployee(employee.id);
+    const { error } = await deleteEmployee(employee.id, employee.avatar_url);
 
     if (!error) {
       toast.success("The employee was scanned successfully");

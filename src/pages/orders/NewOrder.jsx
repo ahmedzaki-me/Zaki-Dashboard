@@ -196,7 +196,13 @@ export default function NewOrder() {
                               <Button
                                 size="icon"
                                 className="rounded-full"
-                                onClick={() => increaseCount(item.id)}
+                                disabled={
+                                  item.stock_quantity ===
+                                  getItemFromLS(item.id)?.count
+                                }
+                                onClick={() =>
+                                  increaseCount(item.id, item.stock_quantity)
+                                }
                               >
                                 <PlusIcon />
                               </Button>
@@ -326,7 +332,10 @@ export default function NewOrder() {
                           variant="outline"
                           size="icon-sm"
                           className="rounded-full h-6.5"
-                          onClick={() => increaseCount(item.id)}
+                          disabled={item.stock_quantity === item.count}
+                          onClick={() =>
+                            increaseCount(item.id, item.stock_quantity)
+                          }
                         >
                           <PlusIcon />
                         </Button>

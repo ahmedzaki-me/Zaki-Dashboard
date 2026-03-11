@@ -23,7 +23,7 @@ export default function ErrorPage() {
         <EmptyTitle>Error</EmptyTitle>
         <EmptyDescription>
           <p className="text-gray-500 mb-8 italic">
-            {error.statusText || error.message}
+            {error.statusText || error.message || error.data}
           </p>
         </EmptyDescription>
       </EmptyHeader>

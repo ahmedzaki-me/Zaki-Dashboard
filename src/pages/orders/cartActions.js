@@ -13,19 +13,19 @@ export default function Cart() {
     localStorage.setItem("cartItemsInLS", JSON.stringify(cartItems));
   }, [cartItems]);
 
-  function increaseCount(itemtId) {
+  function increaseCount(itemtId, stock_quantity) {
     setCartItems((prev) =>
       prev.map((item) =>
-        item.id === itemtId ? { ...item, count: item.count + 1 } : item,
+        item.id === itemtId && item.count < stock_quantity
+          ? { ...item, count: item.count + 1 }
+          : item,
       ),
     );
   }
 
   function addNotes(itemtId, notes) {
     setCartItems((prev) =>
-      prev.map((item) =>
-        item.id === itemtId ? { ...item, notes } : item,
-      ),
+      prev.map((item) => (item.id === itemtId ? { ...item, notes } : item)),
     );
   }
 

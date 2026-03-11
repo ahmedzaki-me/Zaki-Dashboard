@@ -45,7 +45,6 @@ export default function OrderDetails() {
   const {
     orders = [],
     orderItems = [],
-    Items = [],
     profiles = [],
   } = useLoaderData() || {};
 
@@ -55,9 +54,7 @@ export default function OrderDetails() {
   const ordersMap = Object.fromEntries(
     orders.map((order) => [order.invoice, order]),
   );
-  const orderItemsMap = Object.fromEntries(
-    Items.map((item) => [item.id, item]),
-  );
+
 
   const findOrder = ordersMap[orderInvoice] ?? null;
   const findUserName = profilesMap[findOrder?.user_id] ?? "Unknown User";
@@ -65,11 +62,6 @@ export default function OrderDetails() {
   const findOrderItems = orderItems.filter(
     (item) => item.order_id === findOrder?.id,
   );
-
-  const fullItems = findOrderItems.map((orderItem) => ({
-    ...orderItem,
-    itemDetails: orderItemsMap[orderItem.item_id],
-  }));
 
   const totalQuantity = findOrderItems.reduce(
     (acc, item) => acc + (item.status === "completed" ? item.quantity || 0 : 0),
@@ -171,7 +163,7 @@ export default function OrderDetails() {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {fullItems.map((item) => (
+                {findOrderItems.map((item) => (
                   <TableRow
                     key={item.id}
                     className="hover:bg-muted/30 transition-colors"
@@ -179,10 +171,10 @@ export default function OrderDetails() {
                     <TableCell>
                       <div className="flex items-center gap-3">
                         <div className="w-12 h-12 rounded-lg bg-muted overflow-hidden border border-border shrink-0">
-                          {item.itemDetails?.image_url ? (
+                          {item?.image_url ? (
                             <img
-                              src={item.itemDetails.image_url}
-                              alt={item.itemDetails?.name}
+                              src={item?.image_url}
+                              alt={item?.name}
                               className="w-full h-full object-cover"
                             />
                           ) : (
@@ -194,7 +186,7 @@ export default function OrderDetails() {
 
                         <div className="min-w-0 w-50">
                           <p className="font-semibold text-foreground">
-                            {item.itemDetails?.name}
+                            {item?.name}
                           </p>
                           {item.notes && (
                             <p className="text-xs text-muted-foreground wrap-break-word max-w-58 whitespace-normal ">

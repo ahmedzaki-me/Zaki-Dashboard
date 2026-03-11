@@ -23,6 +23,8 @@ export default function MenuPage() {
   const [activeCategoryId, setActiveCategoryId] = useState("all");
 
   const { items, categories } = useLoaderData();
+  console.log("items:  ", items);
+  console.log("categories:  ", categories);
   const { user } = useAuth();
 
   const filteredItems = useMemo(() => {

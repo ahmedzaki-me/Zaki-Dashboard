@@ -8,8 +8,8 @@ export default function NavDarkMode() {
   });
 
   useEffect(() => {
-    document.body.classList.remove("dark", "light");
-    document.body.classList.add(mode);
+    document.documentElement.classList.remove("dark", "light");
+    document.documentElement.classList.add(mode);
     localStorage.setItem("mode", mode);
   }, [mode]);
 
@@ -28,17 +28,4 @@ export default function NavDarkMode() {
     </div>
   );
 }
-// <div className="flex flex-col gap-5">
-//   <IoIosArrowUp onClick={() => setOpenIcon(!openIcon)} />
-//   {mode === "dark" ? (
-//     <FiSun onClick={() => handleMode()} />
-//   ) : (
-//     <MdDarkMode onClick={() => handleMode()} />
-//   )}
 
-//   <IoLanguageOutline
-//     onClick={() => i18n.changeLanguage(i18n.language === "ar" ? "en" : "ar")}
-//   />
-// </div>;
-
-/*isLoading && "cursor-not-allowed opacity-50"*/

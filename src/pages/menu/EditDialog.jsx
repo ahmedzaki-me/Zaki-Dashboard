@@ -47,7 +47,6 @@ const editSchema = z.object({
   }, "Image must be less than 0.5MB (500KB)"),
 });
 
-
 export default function EditDialog({ item }) {
   const form = useForm({
     resolver: zodResolver(editSchema),

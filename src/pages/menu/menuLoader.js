@@ -1,4 +1,4 @@
-import { getItems, getCategories } from "../../lib/supabase";
+import { getItems, getCategories } from "@/lib/supabase";
 
 export const menuLoader = async () => {
   try {

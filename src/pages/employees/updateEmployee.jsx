@@ -88,7 +88,7 @@ export default function UpdateEmployee({ user }) {
   const revalidator = useRevalidator();
 
   const onSubmit = async (values) => {
-    const { success } = await updateEmployee(values, user.id);
+    const { success } = await updateEmployee(values, user.id, user.avatar_url);
     if (success) {
       toast.success("successfully");
       setTimeout(() => {

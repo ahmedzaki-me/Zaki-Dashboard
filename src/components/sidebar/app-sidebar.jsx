@@ -118,7 +118,7 @@ export function AppSidebar({ ...props }) {
                   <span className="truncate font-medium">Zaki Dashboard</span>
                   <span className="truncate text-xs">
                     Plan:{" "}
-                    <span className="text-green-600 font-semibold">Free</span>
+                    <span className="text-chart-3 font-semibold">Free</span>
                   </span>
                 </div>
               </Link>
