@@ -502,10 +502,11 @@ export default function ThemeSwitcher() {
 
       <button
         onClick={() => setOpen((v) => !v)}
-        className="flex h-10 w-5 items-center justify-center rounded-l-md border
-                    border-r-0 border-border bg-background shadow-md text-muted-foreground
+        className="flex h-10 w-5 items-center justify-center rounded-l-md border border-r-0 
+                    border-border bg-background shadow-md text-muted-foreground
                     hover:text-foreground hover:bg-accent transition-colors
-                    fixed right-0 top-1/2  -translate-y-43 z-51 "
+                    fixed right-0 top-1/2 -translate-y-43 z-51 "
+
         aria-label="Toggle theme panel"
       >
         {open ? (

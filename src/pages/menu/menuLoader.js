@@ -1,14 +1,10 @@
-import { getItems, getCategories } from "@/lib/supabase";
+import { queryClient } from "@/lib/queryClient";
+import { menuQueries } from "@/hooks/useMenuQuery";
 
 export const menuLoader = async () => {
-  try {
-    const [items, categories] = await Promise.all([
-      getItems(),
-      getCategories(),
-    ]);
-
-    return { items, categories };
-  } catch (error) {
-    throw new Response("Failed to load menu data", { status: 500 });
-  }
+  const [items, categories] = await Promise.all([
+    queryClient.ensureQueryData(menuQueries.items()),
+    queryClient.ensureQueryData(menuQueries.categories()),
+  ]);
+  return { items, categories };
 };

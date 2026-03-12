@@ -1,11 +1,8 @@
-import { getProfiles } from "../../lib/supabase";
-
+import { queryClient } from "@/lib/queryClient";
+import { employeesQueries } from "@/hooks/useEmployeesQuery";
 export const employeesLoader = async () => {
-  try {
-    const profiles = await getProfiles();
-
-    return { profiles };
-  } catch (error) {
-    throw new Response("Failed to load menu data", { status: 500 });
-  }
+  const [profiles] = await Promise.all([
+    queryClient.ensureQueryData(employeesQueries.profiles()),
+  ]);
+  return { profiles };
 };

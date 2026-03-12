@@ -59,7 +59,7 @@ const updateSchema = z.object({
     .max(30)
     .optional()
     .or(z.literal("")),
-  role: z.enum(["admin", "cashier", "owner"]).optional().or(z.literal("")),
+  role: z.enum(["admin", "cashier"]).optional().or(z.literal("")),
   image: z
     .any()
     .optional()
@@ -195,7 +195,6 @@ export default function UpdateEmployee({ user }) {
                           <SelectLabel>Roles</SelectLabel>
                           <SelectItem value="admin">Admin</SelectItem>
                           <SelectItem value="cashier">Cashier</SelectItem>
-                          <SelectItem value="owner">Owner</SelectItem>
                         </SelectGroup>
                       </SelectContent>
                     </Select>

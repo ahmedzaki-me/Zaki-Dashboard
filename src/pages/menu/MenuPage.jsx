@@ -21,10 +21,7 @@ import { useAuth } from "@/hooks/useAuth";
 
 export default function MenuPage() {
   const [activeCategoryId, setActiveCategoryId] = useState("all");
-
   const { items, categories } = useLoaderData();
-  console.log("items:  ", items);
-  console.log("categories:  ", categories);
   const { user } = useAuth();
 
   const filteredItems = useMemo(() => {
@@ -40,8 +37,8 @@ export default function MenuPage() {
 
   return (
     <Tabs defaultValue="all" onValueChange={setActiveCategoryId}>
-      {/*  categories */}
 
+      {/*  categories */}
       <TabsList className="flex w-full justify-start overflow-x-auto overflow-y-hidden whitespace-nowrap rounded-lg bg-muted p-1 scrollbar-hide">
         <TabsTrigger value="all" className="shrink-0 cursor-pointer">
           All
