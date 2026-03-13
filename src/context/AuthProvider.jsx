@@ -4,6 +4,7 @@ import { AuthContext } from "./AuthContext";
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
+  const [session, setSession] = useState(null); 
   const [loading, setLoading] = useState(true);
 
   const refreshFullUserData = async () => {
@@ -14,33 +15,35 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     const initAuth = async () => {
       const {
-        data: { session },
+        data: { session: initialSession },
       } = await supabase.auth.getSession();
 
-      if (session?.user) {
-        setUser(session.user);
-        setLoading(false);
+      if (initialSession) {
+        setSession(initialSession);
+        setUser(initialSession.user);
         refreshFullUserData();
-      } else {
-        setLoading(false);
       }
+      setLoading(false);
     };
+
     initAuth();
 
     const {
       data: { subscription },
-    } = supabase.auth.onAuthStateChange(async (event, session) => {
-      if (session?.user) {
-        setUser(session.user);
-        setLoading(false);
+    } = supabase.auth.onAuthStateChange(async (event, currentSession) => {
+      setSession(currentSession); 
+
+      if (currentSession?.user) {
+        setUser(currentSession.user);
 
         if (event === "SIGNED_IN" || event === "USER_UPDATED") {
           refreshFullUserData();
         }
       } else {
         setUser(null);
-        setLoading(false);
+        setSession(null);
       }
+      setLoading(false);
     });
 
     return () => {
@@ -49,7 +52,9 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   return (
-    <AuthContext.Provider value={{ user, loading, refreshFullUserData }}>
+    <AuthContext.Provider
+      value={{ user, session, loading, refreshFullUserData }}
+    >
       {children}
     </AuthContext.Provider>
   );

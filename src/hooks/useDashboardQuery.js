@@ -1,20 +1,15 @@
 import { supabase } from "@/lib/supabase";
 import { useQuery } from "@tanstack/react-query";
+import { useAuth } from "@/hooks/useAuth";
 
 export const dashboardKeys = {
-  stats: ["dashboard", "stats"],
+  stats: (userId) => ["dashboard", "stats", userId],
 };
 
 export const dashboardQueries = {
-  stats: () => ({
-    queryKey: dashboardKeys.stats,
+  stats: (userId, session) => ({
+    queryKey: dashboardKeys.stats(userId),
     queryFn: async () => {
-      const {
-        data: { session },
-      } = await supabase.auth.getSession();
-
-      if (!session) throw new Error("Not authenticated");
-
       const { data, error } = await supabase.functions.invoke(
         "get-dashboard-stats",
         {
@@ -26,7 +21,12 @@ export const dashboardQueries = {
       return data;
     },
     staleTime: 1000 * 60 * 2,
+    enabled: !!userId && !!session,
   }),
 };
 
-export const useDashboardStats = () => useQuery(dashboardQueries.stats());
+export const useDashboardStats = () => {
+  const { user, session } = useAuth();
+
+  return useQuery(dashboardQueries.stats(user?.id, session));
+};

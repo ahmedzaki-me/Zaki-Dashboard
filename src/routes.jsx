@@ -55,7 +55,7 @@ export const router = createBrowserRouter(
         </ProtectedRoute>
       ),
       hydrateFallbackElement: <MenuFallback />,
-      // errorElement: <ErrorPage />,
+      errorElement: <ErrorPage />,
       children: [
         {
           index: true,
@@ -103,4 +103,3 @@ export const router = createBrowserRouter(
     },
   ],
 );
-

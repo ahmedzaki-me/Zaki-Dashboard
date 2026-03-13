@@ -7,12 +7,12 @@ import { queryClient } from "./lib/queryClient";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 function App() {
   return (
-      <AuthProvider>
     <QueryClientProvider client={queryClient}>
+      <AuthProvider>
         <RouterProvider router={router} />
+      </AuthProvider>
       {/* <ReactQueryDevtools initialIsOpen={false} /> */}
     </QueryClientProvider>
-      </AuthProvider>
   );
 }
 
