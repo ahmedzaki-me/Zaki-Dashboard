@@ -10,7 +10,6 @@ import {
 } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
-import { useLoaderData } from "react-router-dom";
 import AlertDialogDestructive from "@/pages/menu/DeleteButton";
 import EditDialog from "./EditDialog";
 import { CirclePlus } from "lucide-react";
@@ -18,10 +17,15 @@ import AddCategory from "./AddCategory";
 import CategoryButtons from "./CategoryButtons";
 
 import { useAuth } from "@/hooks/useAuth";
+import { useItems } from "@/hooks/useMenuQuery";
+import { useCategories } from "@/hooks/useMenuQuery";
 
 export default function MenuPage() {
   const [activeCategoryId, setActiveCategoryId] = useState("all");
-  const { items, categories } = useLoaderData();
+  
+  const { data: items = [] } = useItems();
+  const { data: categories = [] } = useCategories();
+
   const { user } = useAuth();
 
   const filteredItems = useMemo(() => {
@@ -37,7 +41,6 @@ export default function MenuPage() {
 
   return (
     <Tabs defaultValue="all" onValueChange={setActiveCategoryId}>
-
       {/*  categories */}
       <TabsList className="flex w-full justify-start overflow-x-auto overflow-y-hidden whitespace-nowrap rounded-lg bg-muted p-1 scrollbar-hide">
         <TabsTrigger value="all" className="shrink-0 cursor-pointer">

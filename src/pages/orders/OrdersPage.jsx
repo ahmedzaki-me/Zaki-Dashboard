@@ -10,11 +10,15 @@ import {
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { Spinner } from "@/components/ui/spinner";
-
-import { useLoaderData } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
-import { UpdateStatus } from "./UpdateStatus";
 import { ChevronDownIcon } from "lucide-react";
+
+import { useSearchParams, useNavigate } from "react-router-dom";
+import { UpdateStatus } from "./UpdateStatus";
+import { OrdersFilter } from "./OrdersFilter";
+
+import { useOrders } from "@/hooks/useOrdersQuery";
+import { useProfiles } from "@/hooks/useOrdersQuery";
+
 const statusConfig = {
   completed:
     "bg-emerald-100 text-emerald-700 border-emerald-200 hover:bg-emerald-100",
@@ -36,10 +40,46 @@ const formatCurrency = new Intl.NumberFormat("en", {
   currency: "USD",
 });
 
+const getDateRange = (filter) => {
+  const now = new Date();
+
+  switch (filter) {
+    case "today": {
+      const start = new Date(now);
+      start.setHours(0, 0, 0, 0);
+      return { start, end: now };
+    }
+    case "yesterday": {
+      const start = new Date(now);
+      start.setDate(start.getDate() - 1);
+      start.setHours(0, 0, 0, 0);
+      const end = new Date(start);
+      end.setHours(23, 59, 59, 999);
+      return { start, end };
+    }
+    case "week": {
+      const start = new Date(now);
+      start.setDate(start.getDate() - 7);
+      return { start, end: now };
+    }
+    case "month": {
+      const start = new Date(now);
+      start.setDate(1);
+      start.setHours(0, 0, 0, 0);
+      return { start, end: now };
+    }
+    default:
+      return null;
+  }
+};
+
 export default function OrdersPage() {
   const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
 
-  const { orders = [], profiles = [] } = useLoaderData() || {};
+  const { data: orders = [] } = useOrders();
+  const { data: profiles = [] } = useProfiles();
+
   const profilesMap = Object.fromEntries(
     profiles.map((p) => [p.id, p.full_name]),
   );
@@ -48,8 +88,58 @@ export default function OrdersPage() {
     return profilesMap[userId] ?? "Unknown User";
   };
 
+  const filter = searchParams.get("filter") || "today";
+  const employeeFilter = searchParams.get("employee") || "all";
+  const statusFilter = searchParams.get("status") || "all";
+  const methodsFilter = searchParams.get("methods") || "all";
+  const query = searchParams.get("q") || "";
+
+  const getFilteredOrders = (
+    orders,
+    { filter, employeeFilter, statusFilter, methodsFilter, query },
+  ) => {
+    let result = orders;
+
+    const range = getDateRange(filter);
+
+    if (range) {
+      result = result.filter((order) => {
+        const date = new Date(order.created_at);
+        return date >= range.start && date <= range.end;
+      });
+    }
+
+    if (employeeFilter !== "all") {
+      result = result.filter(
+        (order) => profilesMap[order.user_id] === employeeFilter,
+      );
+    }
+
+    if (statusFilter !== "all") {
+      result = result.filter((order) => order.status === statusFilter);
+    }
+
+    if (methodsFilter !== "all") {
+      result = result.filter((order) => order.payment_method === methodsFilter);
+    }
+    if (query) {
+      result = result.filter((order) =>
+        order.invoice.toString().includes(query.trim()),
+      );
+    }
+    return result;
+  };
+
+  const filteredOrders = getFilteredOrders(orders, {
+    filter,
+    employeeFilter,
+    statusFilter,
+    methodsFilter,
+    query,
+  });
+
   const dayTotal = formatCurrency.format(
-    orders?.reduce(
+    filteredOrders?.reduce(
       (acc, order) =>
         acc + (order.status === "completed" ? order.total_price || 0 : 0),
       0,
@@ -58,10 +148,9 @@ export default function OrdersPage() {
 
   return (
     <>
-      <UpdateStatus />
-
+      <OrdersFilter profiles={profiles} />
       <Table>
-        <TableCaption>A list of your recent invoices.</TableCaption>
+        <TableCaption>{filteredOrders.length} orders found</TableCaption>
 
         <TableHeader className="bg-muted/50">
           <TableRow className="hover:bg-transparent">
@@ -81,9 +170,13 @@ export default function OrdersPage() {
         </TableHeader>
 
         <TableBody>
-          {orders?.map((order) => (
+          {filteredOrders?.map((order) => (
             <TableRow
-              onClick={() => navigate(`${order.invoice}`)}
+              onClick={() =>
+                navigate(`${order.invoice}`, {
+                  state: { from: location.search },
+                })
+              }
               key={order.id}
               className="cursor-pointer group"
             >

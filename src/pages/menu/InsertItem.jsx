@@ -27,7 +27,6 @@ import { Input } from "@/components/ui/input";
 import { ImageUpload } from "@/components/shared/ImageUpload";
 
 import { useForm } from "react-hook-form";
-import { useRevalidator } from "react-router-dom";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { insertItem } from "./menuActions";
@@ -49,6 +48,7 @@ const editSchema = z.object({
 });
 
 import { useAuth } from "@/hooks/useAuth";
+import { useQueryClient } from "@tanstack/react-query";
 
 export default function InsertItem({ children, categoryId: category_id }) {
   const { user } = useAuth();
@@ -66,7 +66,7 @@ export default function InsertItem({ children, categoryId: category_id }) {
 
   const [open, setOpen] = useState(false);
   const { isSubmitting } = form.formState;
-  const revalidator = useRevalidator();
+  const queryClient = useQueryClient();
 
   const onSubmit = async (values) => {
     const { success, data } = await insertItem(user?.id, category_id, values);
@@ -76,7 +76,7 @@ export default function InsertItem({ children, categoryId: category_id }) {
       setTimeout(() => {
         setOpen(false);
         form.reset();
-        revalidator.revalidate();
+        queryClient.invalidateQueries({ queryKey: ["items"] });
       }, 200);
     } else {
       toast.error("Failed to insert the item");

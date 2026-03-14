@@ -12,18 +12,19 @@ import {
 } from "@/components/ui/alert-dialog";
 import { TrashIcon } from "lucide-react";
 import { deleteEmployee } from "./employeesActions";
-import { useRevalidator } from "react-router-dom";
 import { toast } from "sonner";
 
+import { useQueryClient } from "@tanstack/react-query";
+
 export default function DeleteEmployee({ employee, children }) {
-  const revalidator = useRevalidator();
+  const queryClient = useQueryClient();
 
   const handleDelete = async () => {
     const { error } = await deleteEmployee(employee.id, employee.avatar_url);
 
     if (!error) {
       toast.success("The employee was scanned successfully");
-      revalidator.revalidate();
+      queryClient.invalidateQueries({ queryKey: ["profiles"] });
     } else {
       console.log(error);
 

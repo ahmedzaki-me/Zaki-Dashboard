@@ -24,13 +24,12 @@ import { useState } from "react";
 
 import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
-import { ImageUpload } from "@/components/shared/ImageUpload";
 
 import { useForm } from "react-hook-form";
-import { useRevalidator } from "react-router-dom";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { updateCategory } from "./menuActions";
+import { useQueryClient } from "@tanstack/react-query";
 
 const updateSchema = z.object({
   name: z.string().min(3, "name must be at least 3 characters").max(30),
@@ -50,7 +49,7 @@ export default function UpdateCategory({ category, children }) {
 
   const [open, setOpen] = useState(false);
   const { isSubmitting } = form.formState;
-  const revalidator = useRevalidator();
+  const queryClient = useQueryClient();
 
   const onSubmit = async (values) => {
     const { success, data } = await updateCategory(category.id, values);
@@ -59,7 +58,7 @@ export default function UpdateCategory({ category, children }) {
 
       setTimeout(() => {
         setOpen(false);
-        revalidator.revalidate();
+        queryClient.invalidateQueries({ queryKey: ["categories"] });
       }, 200);
     } else {
       toast.error("Failed to modify the Category");

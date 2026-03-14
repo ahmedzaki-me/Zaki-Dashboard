@@ -36,7 +36,6 @@ import { Input } from "@/components/ui/input";
 import { ImageUpload } from "@/components/shared/ImageUpload";
 
 import { useForm } from "react-hook-form";
-import { useRevalidator } from "react-router-dom";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 
@@ -53,8 +52,11 @@ const insertSchema = z.object({
   }, "Image must be less than 0.5MB (500KB)"),
 });
 
+import { useQueryClient } from "@tanstack/react-query";
+
 export default function InsertEmployee() {
   const [showPassword, setShowPassword] = useState(false);
+  const queryClient = useQueryClient();
 
   const form = useForm({
     resolver: zodResolver(insertSchema),
@@ -69,7 +71,6 @@ export default function InsertEmployee() {
 
   const [open, setOpen] = useState(false);
   const { isSubmitting } = form.formState;
-  const revalidator = useRevalidator();
 
   const onSubmit = async (values) => {
     const { success } = await insertEmployee(values);
@@ -78,7 +79,7 @@ export default function InsertEmployee() {
       setTimeout(() => {
         setOpen(false);
         form.reset();
-        revalidator.revalidate();
+        queryClient.invalidateQueries({ queryKey: ["profiles"] });
       }, 200);
     } else {
       toast.error("Error");
@@ -92,7 +93,7 @@ export default function InsertEmployee() {
           <UserRoundPlus /> Add Employee
         </Button>
       </DialogTrigger>
-      
+
       <DialogContent className="sm:max-w-sm">
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">

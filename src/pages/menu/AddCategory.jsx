@@ -21,10 +21,11 @@ import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
 
 import { useForm } from "react-hook-form";
-import { useRevalidator } from "react-router-dom";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { insertCategory } from "./menuActions";
+
+import { useQueryClient } from "@tanstack/react-query";
 
 const insertSchema = z.object({
   name: z.string().min(3, "name must be at least 3 characters").max(30),
@@ -43,16 +44,15 @@ export default function AddCategory({ owner_id }) {
   });
 
   const { isSubmitting } = form.formState;
-  const revalidator = useRevalidator();
+  const queryClient = useQueryClient();
 
   const onSubmit = async (values) => {
-
     const { success, data } = await insertCategory(owner_id, values);
     if (success && data.length != 0) {
       toast.success("insertion operation successfully");
       form.reset();
       setTimeout(() => {
-        revalidator.revalidate();
+        queryClient.invalidateQueries({ queryKey: ["categories"] });
       }, 200);
     } else {
       toast.error("insertion operation failed");

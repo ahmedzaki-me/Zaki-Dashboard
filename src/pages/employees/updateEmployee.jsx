@@ -35,9 +35,9 @@ import { ImageUpload } from "@/components/shared/ImageUpload";
 
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { useRevalidator } from "react-router-dom";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
+import { useQueryClient } from "@tanstack/react-query";
 
 import { updateEmployee } from "./employeesActions";
 
@@ -71,6 +71,7 @@ const updateSchema = z.object({
 
 export default function UpdateEmployee({ user }) {
   const [showPassword, setShowPassword] = useState(false);
+  const queryClient = useQueryClient();
 
   const form = useForm({
     resolver: zodResolver(updateSchema),
@@ -85,7 +86,6 @@ export default function UpdateEmployee({ user }) {
 
   const [open, setOpen] = useState(false);
   const { isSubmitting } = form.formState;
-  const revalidator = useRevalidator();
 
   const onSubmit = async (values) => {
     const { success } = await updateEmployee(values, user.id, user.avatar_url);
@@ -94,7 +94,7 @@ export default function UpdateEmployee({ user }) {
       setTimeout(() => {
         setOpen(false);
         form.reset();
-        revalidator.revalidate();
+        queryClient.invalidateQueries({ queryKey: ["profiles"] });
       }, 200);
     } else {
       toast.error("Error");

@@ -59,7 +59,6 @@ export function LoginForm({ className, ...props }) {
           </CardDescription>
         </CardHeader>
         <CardContent>
-
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
               {actionData?.error && (
@@ -99,6 +98,7 @@ export function LoginForm({ className, ...props }) {
                       <div className="relative">
                         <Input
                           type={showPassword ? "text" : "password"}
+                          autoComplete="new-password"
                           {...field}
                           className="pr-10"
                         />
@@ -134,7 +134,6 @@ export function LoginForm({ className, ...props }) {
               </Button>
             </form>
           </Form>
-          
         </CardContent>
       </Card>
     </div>

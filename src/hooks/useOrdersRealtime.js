@@ -1,10 +1,10 @@
 import { useEffect, useRef, useCallback } from "react";
-import { useRevalidator } from "react-router-dom";
+import { useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/lib/supabase";
 import { toast } from "sonner";
 
 export function useOrdersRealtime() {
-  const { revalidate } = useRevalidator();
+  const queryClient = useQueryClient();
   const channelRef = useRef(null);
   const timeoutRef = useRef(null);
   const recentInserts = useRef(new Set());
@@ -12,9 +12,9 @@ export function useOrdersRealtime() {
   const triggerRevalidate = useCallback(() => {
     clearTimeout(timeoutRef.current);
     timeoutRef.current = setTimeout(() => {
-      revalidate();
-    }, 700);
-  }, [revalidate]);
+      queryClient.invalidateQueries({ queryKey: ["orders"] });
+    }, 500);
+  }, [queryClient]);
 
   useEffect(() => {
     if (channelRef.current) return;

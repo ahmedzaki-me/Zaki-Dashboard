@@ -1,7 +1,6 @@
 import { supabase } from "@/lib/supabase";
 
 export const handlePlaceOrder = async (userId, cartItems, subTotal, status) => {
-  console.log(cartItems);
   const { data, error } = await supabase.rpc("place_new_order", {
     order_data: {
       user_id: userId,

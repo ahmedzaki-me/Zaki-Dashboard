@@ -8,10 +8,13 @@ export const dashboardLoader = async () => {
   } = await supabase.auth.getSession();
 
   if (!session) {
+    queryClient.clear();
     return null;
   }
 
-  return queryClient.ensureQueryData(
+  await queryClient.prefetchQuery(
     dashboardQueries.stats(session.user.id, session),
   );
+
+  return null;
 };

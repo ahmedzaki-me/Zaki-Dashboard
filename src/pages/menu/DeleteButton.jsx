@@ -12,18 +12,19 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import { TrashIcon } from "lucide-react";
-import { deleteItem } from "@/pages/menu/menuActions";
-import { useRevalidator } from "react-router-dom";
 import { toast } from "sonner";
 
+import { deleteItem } from "@/pages/menu/menuActions";
+import { useQueryClient } from "@tanstack/react-query";
+
 export default function AlertDialogDestructive({ id, itemName }) {
-  const revalidator = useRevalidator();
+  const queryClient = useQueryClient();
 
   const handleDelete = async () => {
     const { error, data } = await deleteItem(id);
     if ((!error, data.length > 0)) {
       toast.success("The item was scanned successfully");
-      revalidator.revalidate();
+      queryClient.invalidateQueries({ queryKey: ["items"] });
     } else {
       toast.error("The item was not cleared");
     }

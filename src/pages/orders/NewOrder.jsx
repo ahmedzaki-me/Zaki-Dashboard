@@ -23,11 +23,13 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 import * as React from "react";
-import { useLoaderData } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 import Cart from "./cartActions";
 import { handlePlaceOrder } from "./ordersActions";
 import { AddNotes } from "./AddNots";
+
+import { useItems } from "@/hooks/useMenuQuery";
+import { useCategories } from "@/hooks/useMenuQuery";
 
 const statusConfig = {
   completed:
@@ -42,7 +44,10 @@ export default function NewOrder() {
 
   const [openCart, setOpenCart] = useState(false);
   const [activeCategoryId, setActiveCategoryId] = useState("all");
-  const { items, categories } = useLoaderData();
+
+  const { data: items = [] } = useItems();
+  const { data: categories = [] } = useCategories();
+
   const { user } = useAuth();
   const {
     cartItems,

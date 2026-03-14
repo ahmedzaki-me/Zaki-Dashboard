@@ -42,11 +42,7 @@ const formatCurrency = new Intl.NumberFormat("en", {
 
 export default function OrderDetails() {
   const { orderInvoice } = useParams();
-  const {
-    orders = [],
-    orderItems = [],
-    profiles = [],
-  } = useLoaderData() || {};
+  const { orders = [], orderItems = [], profiles = [] } = useLoaderData() || {};
 
   const profilesMap = Object.fromEntries(
     profiles.map((p) => [p.id, p.full_name]),
@@ -54,7 +50,6 @@ export default function OrderDetails() {
   const ordersMap = Object.fromEntries(
     orders.map((order) => [order.invoice, order]),
   );
-
 
   const findOrder = ordersMap[orderInvoice] ?? null;
   const findUserName = profilesMap[findOrder?.user_id] ?? "Unknown User";
@@ -64,7 +59,7 @@ export default function OrderDetails() {
   );
 
   const totalQuantity = findOrderItems.reduce(
-    (acc, item) => acc + (item.status === "completed" ? item.quantity || 0 : 0),
+    (acc, item) => acc + item.quantity || 0,
     0,
   );
 

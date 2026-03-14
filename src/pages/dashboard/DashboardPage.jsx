@@ -44,6 +44,7 @@ import {
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 
+import { useDashboardStats } from "@/hooks/useDashboardQuery";
 // ─── helpers ────────────────────────────────────────────────────────────────
 
 const fmt = (v) =>
@@ -327,8 +328,8 @@ function CashierTable({ cashierStats }) {
 // ─── main page ───────────────────────────────────────────────────────────────
 
 export default function DashboardPage() {
-  const data = useLoaderData();
   const { loading } = useAuth();
+  const { data, isError } = useDashboardStats();
 
   if (loading) {
     return (
@@ -338,18 +339,24 @@ export default function DashboardPage() {
     );
   }
 
-  if (!data) {
+  if (isError || !data) {
     return (
-      <div className="flex h-screen items-center justify-center text-muted-foreground">
-        No data available.
+      <div className="flex h-screen flex-col items-center justify-center gap-2 text-muted-foreground">
+        <p className="text-lg font-medium">Access Restricted</p>
+        <p className="text-sm">
+          You don't have permission to view dashboard stats.
+        </p>
       </div>
     );
   }
-
   const { summary, yearlyBreakdown, cashierStats } = data;
-  const topCashier = [...cashierStats].sort(
-    (a, b) => b.totalSales - a.totalSales,
-  )[0];
+
+  const topCashier =
+    cashierStats.length > 0
+      ? [...cashierStats].sort(
+          (a, b) => (b.totalSales || 0) - (a.totalSales || 0),
+        )[0]
+      : null;
 
   return (
     <div className="flex flex-col gap-6 p-6">

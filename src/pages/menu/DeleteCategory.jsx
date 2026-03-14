@@ -11,18 +11,19 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { TrashIcon } from "lucide-react";
-import { deleteCategory } from "@/pages/menu/menuActions";
-import { useRevalidator } from "react-router-dom";
 import { toast } from "sonner";
 
+import { deleteCategory } from "@/pages/menu/menuActions";
+import { useQueryClient } from "@tanstack/react-query";
+
 export default function DeleteCategory({ category, children }) {
-  const revalidator = useRevalidator();
+  const queryClient = useQueryClient();
 
   const handleDelete = async () => {
     const { error, data } = await deleteCategory(category.id);
     if ((!error, data.length > 0)) {
       toast.success("The category was scanned successfully");
-      revalidator.revalidate();
+      queryClient.invalidateQueries({ queryKey: ["categories"] });
     } else {
       toast.error("The category was not cleared");
     }
