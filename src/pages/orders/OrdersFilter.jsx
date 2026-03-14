@@ -154,7 +154,7 @@ export function OrdersFilter({ profiles = [] }) {
           </Button>
         </SheetTrigger>
 
-        <SheetContent>
+        <SheetContent className="overflow-y-auto overflow-x-hidden">
           <SheetHeader>
             <SheetTitle>Filters</SheetTitle>
             <SheetDescription>
