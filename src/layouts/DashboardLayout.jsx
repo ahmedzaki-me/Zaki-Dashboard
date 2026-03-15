@@ -37,7 +37,7 @@ export default function DashboardLayout() {
           return;
         }
         await OneSignal.init({
-          appId: "2b1a2a08-fa45-43cd-b4ca-33e02f06a317",
+          appId: import.meta.env.VITE_ONESIGNAL_APP_ID,
           serviceWorkerPath: "/OneSignalSDKWorker.js",
           notifyButton: {
             enable: true,
