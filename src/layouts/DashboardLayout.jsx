@@ -43,9 +43,7 @@ export default function DashboardLayout() {
             enable: true,
           },
         });
-
         await OneSignal.login(userId);
-        console.log("OneSignal linked to user:", userId);
 
         console.log("OneSignal is ready!");
       } catch (err) {
